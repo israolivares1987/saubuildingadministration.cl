@@ -53,26 +53,7 @@
  *
  * NOTE: If you change these, also change the error_reporting() code below
  */
-if($_SERVER['SERVER_NAME']){
-	switch ($_SERVER['SERVER_NAME']) {
-
-		#DESARROLLO LOCAL
-		case 'localhost':
-			define('ENVIRONMENT', 'development');
-			break;
-
-		#AMBIENTE QA
-		case '':
-			define('ENVIRONMENT', 'testing');
-			break;
-
-		#AMBIENTE PRODUCCIÓN
-		case 'saubuildingadministration.cl':
-			define('ENVIRONMENT', 'production');
-			break;
-	}
-}
-
+	define('ENVIRONMENT', isset($_SERVER['CI_ENV']) ? $_SERVER['CI_ENV'] : 'development');
 
 /*
  *---------------------------------------------------------------
