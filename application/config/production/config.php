@@ -23,8 +23,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['base_url'] = 'https://'.$_SERVER['HTTP_HOST'].'/site';
-$config['BASE_SERVICIOS'] = 'https://'.$_SERVER['HTTP_HOST'].'/site';
+$config['base_url'] = 'https://'.$_SERVER['HTTP_HOST'].'/site/';
+$config['BASE_SERVICIOS'] = 'https://'.$_SERVER['HTTP_HOST'].'/site/';
 $config['BASE_ARCHIVOS'] = $_SERVER['DOCUMENT_ROOT'].'/';
 /*
 |--------------------------------------------------------------------------
