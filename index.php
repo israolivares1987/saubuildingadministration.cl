@@ -67,7 +67,7 @@ if($_SERVER['SERVER_NAME']){
 			break;
 
 		#AMBIENTE PRODUCCIÓN
-		case 'beisco.cl':
+		case 'saubuildingadministration.cl':
 			define('ENVIRONMENT', 'production');
 			break;
 	}
