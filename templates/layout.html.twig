@@ -167,13 +167,22 @@
         </div>
 
         <!-- Sidebar Menu -->
+        {% set route_name = app.request.attributes.get('_route') %}
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
             <!-- Add icons to the links using the .nav-icon class
                 with font-awesome or any other icon font library -->
-            <li class="nav-item menu-open">
-                <a href="#" class="nav-link active">
+            <li class="nav-item">
+                <a href="{{ path('dashboard') }}" {% if route_name == "dashboard" %} class="nav-link active" {% else %} class="nav-link" {% endif %}>
                 <i class="nav-icon fas fa-tachometer-alt"></i>
+                <p>
+                    Dashboard
+                </p>
+                </a>
+            </li>
+            {# <li class="nav-item menu-open">
+                <a href="#" class="nav-link">
+                <i class="nav-icon fas fa-th"></i>
                 <p>
                     Datos Principales
                     <i class="right fas fa-angle-left"></i>
@@ -181,7 +190,7 @@
                 </a>
                 <ul class="nav nav-treeview">
                 <li class="nav-item">
-                    <a href="#" class="nav-link active">
+                    <a href="#" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Unidades</p>
                     </a>
@@ -193,6 +202,18 @@
                     </a>
                 </li>
                 </ul>
+            </li> #}
+            <li class="nav-item">
+                <a href="{{ path('unidades_index') }}"  {% if route_name == "unidades_index" %} class="nav-link active" {% else %} class="nav-link" {% endif %}>
+                <i class="far fa-building nav-icon"></i>
+                <p>Unidades</p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Gastos Comunes</p>
+                </a>
             </li>
             <li class="nav-item">
                 <a href="#" class="nav-link">

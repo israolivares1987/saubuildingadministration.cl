@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UsuarioRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -40,10 +42,16 @@ class Usuario implements UserInterface
      */
     private $estado;
 
+    /**
+     * @ORM\OneToMany(targetEntity=UsuarioRol::class, mappedBy="usuario")
+     */
+    private $usuarioRols;
+
     public function __construct()
     {
         $this->estado = true;
         $this->roles = [];
+        $this->usuarioRols = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -132,6 +140,36 @@ class Usuario implements UserInterface
     public function setEstado(bool $estado): self
     {
         $this->estado = $estado;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|UsuarioRol[]
+     */
+    public function getUsuarioRols(): Collection
+    {
+        return $this->usuarioRols;
+    }
+
+    public function addUsuarioRol(UsuarioRol $usuarioRol): self
+    {
+        if (!$this->usuarioRols->contains($usuarioRol)) {
+            $this->usuarioRols[] = $usuarioRol;
+            $usuarioRol->setUsuario($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUsuarioRol(UsuarioRol $usuarioRol): self
+    {
+        if ($this->usuarioRols->removeElement($usuarioRol)) {
+            // set the owning side to null (unless already changed)
+            if ($usuarioRol->getUsuario() === $this) {
+                $usuarioRol->setUsuario(null);
+            }
+        }
 
         return $this;
     }
