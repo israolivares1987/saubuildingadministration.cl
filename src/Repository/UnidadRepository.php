@@ -21,6 +21,8 @@ class UnidadRepository extends ServiceEntityRepository
 
     public function buscarUnidadesPaginador() {
         return $this->createQueryBuilder('u')
+            ->select('u.id, t.nombre as tipoUnidad, u.edificio, u.piso, u.unidad, u.estado')
+            ->innerJoin('u.tipoUnidad', 't')
             ->getQuery();
     }
 

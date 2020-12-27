@@ -26,6 +26,27 @@
    <div class="content">
       <div class="container-fluid">
          <div class="row">
+            {% for message in app.flashes('unidad_success') %}
+               <div class="col-12">
+                  <div class="card card-success">
+                  <div class="card-header">
+                     <h3 class="card-title">¡Exitoso!</h3>
+
+                     <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-times"></i>
+                        </button>
+                     </div>
+                     <!-- /.card-tools -->
+                  </div>
+                  <!-- /.card-header -->
+                  <div class="card-body">
+                     {{message}}
+                  </div>
+                  <!-- /.card-body -->
+                  </div>
+                  <!-- /.card -->
+               </div>
+            {% endfor %}
             <a href="{{ path('unidades_nuevo') }}" class="btn btn-app bg-success">
                <i class="fas fa-plus"></i> Nuevo
             </a>
@@ -51,13 +72,11 @@
                      <table class="table table-hover text-nowrap">
                         <thead>
                         <tr>
-                           {# <th>{{ knp_pagination_sortable(unidades, 'Tipo Unidad', 'u.tipoUnidad') }}</th> #}
-                           {# <th>{{ knp_pagination_sortable(unidades, 'Edificio', 'u.edificio') }}</th> #}
-                           <th>Tipo Unidad</th>
-                           <th>Edificio</th>
-                           <th>Piso</th>
-                           <th>Unidad</th>
-                           <th>Estado</th>
+                           <th>{{ knp_pagination_sortable(unidades, 'Tipo Unidad', 't.nombre') }}</th>
+                           <th>{{ knp_pagination_sortable(unidades, 'Edificio', 'u.edificio') }}</th>
+                           <th>{{ knp_pagination_sortable(unidades, 'Piso', 'u.piso') }}</th>
+                           <th>{{ knp_pagination_sortable(unidades, 'Unidad', 'u.unidad') }}</th>
+                           <th>{{ knp_pagination_sortable(unidades, 'Estado', 'u.estado') }}</th>
                            <th>Acciones</th>
                         </tr>
                         </thead>

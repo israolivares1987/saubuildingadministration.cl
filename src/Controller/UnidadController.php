@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Empresa;
 use App\Entity\Unidad;
 use App\Form\UnidadType;
 use Knp\Component\Pager\PaginatorInterface;
@@ -49,8 +50,12 @@ class UnidadController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
+            $empresa = $entityManager->getRepository(Empresa::class)->find(1);
+            $unidad->setEmpresa($empresa);
             $entityManager->persist($unidad);
             $entityManager->flush();
+
+            $this->addFlash('unidad_success', 'Se creó la unidad');
 
             return $this->redirectToRoute('unidades_index');
         }
@@ -81,6 +86,8 @@ class UnidadController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
+
+            $this->addFlash('unidad_success', 'Se actualizó la unidad');
 
             return $this->redirectToRoute('unidades_index');
         }

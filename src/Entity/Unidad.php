@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\UnidadRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=UnidadRepository::class)
@@ -19,16 +20,21 @@ class Unidad
 
     /**
      * @ORM\Column(type="string", length=10, nullable=true)
+     * @Assert\NotBlank(message = "No puede ser vacio.")
      */
     private $edificio;
 
     /**
      * @ORM\Column(type="string", length=10, nullable=true)
+     * @Assert\NotBlank(message = "No puede ser vacio.")
+     * @Assert\NotEqualTo(value = 0, message = "No puede ser {{ compared_value }}"
+     * )
      */
     private $piso;
 
     /**
      * @ORM\Column(type="string", length=10)
+     * @Assert\NotBlank(message = "No puede ser vacio.")
      */
     private $unidad;
 
@@ -47,6 +53,11 @@ class Unidad
      * @ORM\JoinColumn(nullable=false)
      */
     private $tipoUnidad;
+
+    public function __construct()
+    {
+        $this->estado = true;        
+    }
 
     public function getId(): ?int
     {
