@@ -1,4 +1,5 @@
+---
 deployment:
   tasks:
-    - composer install --no-dev --optimize-autoloader
-    - ln -sf /home/saubuildingadmin/sistema/public_html /home/saubuildingadmin/public_html
+    - export DEPLOYPATH=/home/saubuildingadmin/public_html/
+    - /bin/cp public_html $DEPLOYPATH
