@@ -1,4 +1,4 @@
 ---
 deployment:
   tasks:
-    - composer install --no-dev --optimize-autoloader
+    - composer install
