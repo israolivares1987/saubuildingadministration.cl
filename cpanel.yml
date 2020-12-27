@@ -2,4 +2,4 @@
 deployment:
   tasks:
     - composer install --no-dev --optimize-autoloader
-    
+    - ln -sf /home/saubuildingadmin/sistema/public_html /home/saubuildingadmin/public_html
