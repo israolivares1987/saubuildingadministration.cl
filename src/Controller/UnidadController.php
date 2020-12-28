@@ -3,12 +3,18 @@
 namespace App\Controller;
 
 use App\Entity\Empresa;
+use App\Entity\TipoUnidad;
 use App\Entity\Unidad;
 use App\Form\UnidadType;
 use Knp\Component\Pager\PaginatorInterface;
 use App\Repository\UnidadRepository;
 use Doctrine\ORM\Tools\Pagination\Paginator;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -19,11 +25,55 @@ use Symfony\Component\Routing\Annotation\Route;
 class UnidadController extends AbstractController
 {
     /**
-     * @Route("/", name="unidades_index", methods={"GET"})
+     * @Route("/", name="unidades_index", methods={"GET", "POST"})
      */
     public function index(UnidadRepository $unidadRepository, PaginatorInterface $paginator, Request $request): Response
     {
-        $query = $unidadRepository->buscarUnidadesPaginador();
+        $formFiltro = $this->createFormBuilder()
+            ->add('tipoUnidad', EntityType::class, [
+                'class' => TipoUnidad::class,
+                'choice_label' => 'nombre',
+                'placeholder' => 'Seleccione...',
+                'label' => 'Tipo Unidad',
+                'required' => false
+            ])
+            ->add('edificio', TextType::class, [
+                'required' => false
+            ])
+            ->add('piso', IntegerType::class, [
+                'required' => false
+            ])
+            ->add('unidad', TextType::class, [
+                'required' => false
+            ])
+            ->add('estado', ChoiceType::class, [
+                'choices' => [
+                    'Activo' => true,
+                    'Inactivo' => false,
+                ],
+                'placeholder' => 'Seleccione...',
+                'required' => false
+            ])->add('filtrar', SubmitType::class, [
+                'attr' => ['class' =>'btn btn-primary btn-block'],
+                'label' => 'Filtrar'
+            ])
+            ->setMethod('GET')
+            ->getForm();
+        
+        $formFiltro->handleRequest($request);
+        $tipoUnidad = null;
+        $edificio = null;
+        $piso = null;
+        $unidad = null;
+        $estado = null;
+        if ($formFiltro->isSubmitted() && $formFiltro->isValid()) {
+            $tipoUnidad = $formFiltro['tipoUnidad']->getData();
+            $edificio = $formFiltro['edificio']->getData();
+            $piso = $formFiltro['piso']->getData();
+            $unidad = $formFiltro['unidad']->getData();
+            $estado = $formFiltro['estado']->getData();
+        }
+        $query = $unidadRepository->buscarUnidadesPaginador($tipoUnidad, $edificio, $piso, $unidad, $estado);
         $pagination = $paginator->paginate(
             $query, /* query NOT result */
             $request->query->getInt('page', 1), /*page number*/
@@ -36,6 +86,7 @@ class UnidadController extends AbstractController
         ]);
         return $this->render('unidad/index.html.twig', [
             'unidades' => $pagination,
+            'formFiltro' => $formFiltro->createView()
         ]);
     }
 

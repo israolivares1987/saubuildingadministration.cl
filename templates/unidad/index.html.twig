@@ -51,11 +51,56 @@
                <i class="fas fa-plus"></i> Nuevo
             </a>
             <div class="col-12">
+               <div class="card card-primary">
+                  <div class="card-header">
+                     <h3 class="card-title">Filtros</h3>
+                  </div>
+                  {{form_start(formFiltro)}}
+                     <div class="card-body">
+                        <div class="row">
+                           <div class="col-2">
+                              <div class="form-group">
+                                 {{ form_row(formFiltro.tipoUnidad) }}
+                              </div>
+                           </div>
+                           <div class="col-2">
+                              <div class="form-group">
+                                 {{ form_row(formFiltro.edificio) }}
+                              </div>
+                           </div>
+                           <div class="col-2">
+                              <div class="form-group">
+                                 {{ form_row(formFiltro.piso) }}
+                              </div>
+                           </div>
+                           <div class="col-2">
+                              <div class="form-group">
+                                 {{ form_row(formFiltro.unidad) }}
+                              </div>
+                           </div>
+                           <div class="col-2">
+                              <div class="form-group">
+                                 {{ form_row(formFiltro.estado) }}
+                              </div>
+                           </div>
+                           <div class="col-2">
+                              <div class="form-group">
+                                 <label>&nbsp;</label>
+                                 {{ form_row(formFiltro.filtrar) }}
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  {{ form_end(formFiltro) }}
+                  <!-- /.card-body -->
+               </div>
+            </div>
+            <div class="col-12">
                <div class="card">
                   <div class="card-header">
                      <h3 class="card-title">Listado de Unidades - {{ unidades.getTotalItemCount }} elementos</h3>
 
-                     <div class="card-tools">
+                     {# <div class="card-tools">
                         <div class="input-group input-group-sm" style="width: 150px;">
                         <input type="text" name="table_search" class="form-control float-right" placeholder="Buscar">
 
@@ -65,7 +110,7 @@
                            </button>
                         </div>
                         </div>
-                     </div>
+                     </div> #}
                   </div>
                   <!-- /.card-header -->
                   <div class="card-body table-responsive p-0">
@@ -87,7 +132,6 @@
                                  <td>{{ unidad.edificio }}</td>
                                  <td>{{ unidad.piso }}</td>
                                  <td>{{ unidad.unidad }}</td>
-
                                  <td>{{ unidad.estado ? 'Activo' : 'Inactivo' }}</td>
                                  <td>
                                     <a href="{{ path('unidades_ver', {'id': unidad.id}) }}" class="btn btn-app bg-secondary">

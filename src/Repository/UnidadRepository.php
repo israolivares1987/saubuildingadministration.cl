@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\TipoUnidad;
 use App\Entity\Unidad;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -19,11 +20,29 @@ class UnidadRepository extends ServiceEntityRepository
         parent::__construct($registry, Unidad::class);
     }
 
-    public function buscarUnidadesPaginador() {
-        return $this->createQueryBuilder('u')
-            ->select('u.id, t.nombre as tipoUnidad, u.edificio, u.piso, u.unidad, u.estado')
-            ->innerJoin('u.tipoUnidad', 't')
-            ->getQuery();
+    public function buscarUnidadesPaginador(TipoUnidad $tipoUnidad = null, $edificio = null, $piso = null, $unidad = null, $estado = null) {
+        $qb = $this->createQueryBuilder('u')
+        ->select('u.id, t.nombre as tipoUnidad, u.edificio, u.piso, u.unidad, u.estado')
+        ->innerJoin('u.tipoUnidad', 't');
+
+        if($tipoUnidad != null){
+            $qb->andWhere('u.tipoUnidad = '.$tipoUnidad->getId());
+        }
+        if($edificio != null){
+            $qb->andWhere('u.edificio = '.$edificio);
+        }
+        if($piso != null){
+            $qb->andWhere('u.piso = '.$piso);
+        }
+        if($unidad != null){
+            $qb->andWhere('u.unidad = '.$unidad);
+        }
+        if(!is_null($estado)){
+            $estado = ($estado) ? '1' : '0';
+            $qb->andWhere('u.estado = '.$estado);
+        }
+        
+        return $qb->getQuery();
     }
 
     // /**
