@@ -54,6 +54,13 @@ class Unidad
      */
     private $tipoUnidad;
 
+    /**
+     * @ORM\OneToOne(targetEntity=DatosUnidad::class, mappedBy="unidad", cascade={"persist", "remove"})
+     * @Assert\Type(type="App\Entity\DatosUnidad")
+     * @Assert\Valid
+     */
+    private $datosUnidad;
+
     public function __construct()
     {
         $this->estado = true;        
@@ -132,6 +139,23 @@ class Unidad
     public function setTipoUnidad(?TipoUnidad $tipoUnidad): self
     {
         $this->tipoUnidad = $tipoUnidad;
+
+        return $this;
+    }
+
+    public function getDatosUnidad(): ?DatosUnidad
+    {
+        return $this->datosUnidad;
+    }
+
+    public function setDatosUnidad(DatosUnidad $datosUnidad): self
+    {
+        // set the owning side of the relation if necessary
+        if ($datosUnidad->getUnidad() !== $this) {
+            $datosUnidad->setUnidad($this);
+        }
+
+        $this->datosUnidad = $datosUnidad;
 
         return $this;
     }

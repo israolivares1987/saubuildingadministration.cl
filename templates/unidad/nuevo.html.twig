@@ -35,15 +35,29 @@
 		<div class="content">
 			<div class="container-fluid">
 				<div class="row">
-					<div class="col-md-4"></div>
-					<div class="col-md-4">
+					<div class="col-md-2"></div>
+					<div class="col-md-8">
 						<div class="card card-primary">
 							<div class="card-header">
                 			<h3 class="card-title">Crear Unidad</h3>
               			</div>
 							{{ form_start(form) }}
 							<div class="card-body">	
-								{{ form_widget(form) }}	
+								<div class="row">
+									<div class='col-md-6'>
+										{{ form_row(form.edificio) }}
+										{{ form_row(form.piso) }}
+										{{ form_row(form.unidad) }}
+										{{ form_row(form.tipoUnidad) }}
+									</div>
+									<div class='col-md-6'>
+										{{ form_row(form.datosUnidad.metros2) }}
+										{{ form_row(form.datosUnidad.dormitorios) }}
+										{{ form_row(form.datosUnidad.banios) }}
+										{{ form_row(form.datosUnidad.direccion) }}
+										{{ form_row(form.datosUnidad.detalle) }}
+									</div>
+								</div>
 							</div>
 							<div class="card-footer">
 								<button class="btn btn-primary">{{ button_label|default('Guardar') }}</button>
@@ -51,7 +65,7 @@
 							{{ form_end(form) }}
 						</div>
 					</div>
-					<div class="col-md-4"></div>
+					<div class="col-md-2"></div>
 				</div>
 				
 			</div>

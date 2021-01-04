@@ -1,6 +1,6 @@
 {% extends 'layout.html.twig' %}
 
-{% block title %}{{parent()}} - Unidades{% endblock %}
+{% block title %}{{parent()}} - Clientes{% endblock %}
 
 {% block content %}
 <div class="content-wrapper">
@@ -9,12 +9,12 @@
       <div class="container-fluid">
          <div class="row mb-2">
             <div class="col-sm-6">
-               <h1 class="m-0">Unidades</h1>
+               <h1 class="m-0">Clientes</h1>
             </div><!-- /.col -->
             <div class="col-sm-6">
                <ol class="breadcrumb float-sm-right">
                   <li class="breadcrumb-item"><a href="{{ path('dashboard') }}">Dashboard</a></li>
-                  <li class="breadcrumb-item active">Unidades</li>
+                  <li class="breadcrumb-item active">Clientes</li>
                </ol>
             </div><!-- /.col -->
          </div><!-- /.row -->
@@ -26,7 +26,7 @@
    <div class="content">
       <div class="container-fluid">
          <div class="row">
-            {% for message in app.flashes('unidad_success') %}
+            {% for message in app.flashes('cliente_success') %}
                <div class="col-12">
                   <div class="card card-success">
                   <div class="card-header">
@@ -47,7 +47,7 @@
                   <!-- /.card -->
                </div>
             {% endfor %}
-            <a href="{{ path('unidades_nuevo') }}" class="btn btn-app bg-success">
+            <a href="{{ path('cliente_nuevo') }}" class="btn btn-app bg-success">
                <i class="fas fa-plus"></i> Nuevo
             </a>
             <div class="col-12">
@@ -58,32 +58,22 @@
                   {{form_start(formFiltro)}}
                      <div class="card-body">
                         <div class="row">
-                           <div class="col-2">
+                           <div class="col-3">
                               <div class="form-group">
-                                 {{ form_row(formFiltro.tipoUnidad) }}
+                                 {{ form_row(formFiltro.nombres) }}
                               </div>
                            </div>
-                           <div class="col-2">
+                           <div class="col-3">
                               <div class="form-group">
-                                 {{ form_row(formFiltro.edificio) }}
+                                 {{ form_row(formFiltro.email1) }}
                               </div>
                            </div>
-                           <div class="col-2">
+                           <div class="col-3">
                               <div class="form-group">
-                                 {{ form_row(formFiltro.piso) }}
+                                 {{ form_row(formFiltro.representante) }}
                               </div>
                            </div>
-                           <div class="col-2">
-                              <div class="form-group">
-                                 {{ form_row(formFiltro.unidad) }}
-                              </div>
-                           </div>
-                           <div class="col-2">
-                              <div class="form-group">
-                                 {{ form_row(formFiltro.estado) }}
-                              </div>
-                           </div>
-                           <div class="col-2">
+                           <div class="col-3">
                               <div class="form-group">
                                  <label>&nbsp;</label>
                                  {{ form_row(formFiltro.filtrar) }}
@@ -98,7 +88,7 @@
             <div class="col-12">
                <div class="card">
                   <div class="card-header">
-                     <h3 class="card-title">Listado de Unidades - {{ unidades.getTotalItemCount }} elementos</h3>
+                     <h3 class="card-title">Listado de Clientes - {{ clientes.getTotalItemCount }} elementos</h3>
 
                      {# <div class="card-tools">
                         <div class="input-group input-group-sm" style="width: 150px;">
@@ -117,34 +107,25 @@
                      <table class="table table-hover text-nowrap">
                         <thead>
                         <tr>
-                           <th>{{ knp_pagination_sortable(unidades, 'Tipo Unidad', 't.nombre') }}</th>
-                           <th>{{ knp_pagination_sortable(unidades, 'Edificio', 'u.edificio') }}</th>
-                           <th>{{ knp_pagination_sortable(unidades, 'Piso', 'u.piso') }}</th>
-                           <th>{{ knp_pagination_sortable(unidades, 'Unidad', 'u.unidad') }}</th>
-                           <th>{{ knp_pagination_sortable(unidades, 'Estado', 'u.estado') }}</th>
+                           <th>{{ knp_pagination_sortable(clientes, 'Nombres', 'c.nombres') }}</th>
+                           <th>{{ knp_pagination_sortable(clientes, 'E-Mail', 'c.email1') }}</th>
+                           <th>{{ knp_pagination_sortable(clientes, 'Representante', 'c.representante') }}</th>
                            <th>Acciones</th>
                         </tr>
                         </thead>
                         <tbody>
-                           {% for unidad in unidades %}
+                           {% for cliente in clientes %}
                               <tr>
-                                 <td>{{ unidad.tipoUnidad }}</td>
-                                 <td>{{ unidad.edificio }}</td>
-                                 <td>{{ unidad.piso }}</td>
-                                 <td>{{ unidad.unidad }}</td>
-                                 <td>{{ unidad.estado ? 'Activo' : 'Inactivo' }}</td>
+                                 <td>{{ cliente.nombres }}</td>
+                                 <td>{{ cliente.email1 }}</td>
+                                 <td>{{ cliente.representante }}</td>
                                  <td>
-                                    <a href="{{ path('unidades_ver', {'id': unidad.id}) }}" class="btn btn-app bg-secondary">
+                                    <a href="{{ path('cliente_ver', {'id': cliente.id}) }}" class="btn btn-app bg-secondary">
                                        <i class="fas fa-clipboard-check"></i> Ver Detalle
                                     </a>
-                                    <a href="{{ path('unidades_editar', {'id': unidad.id}) }}" class="btn btn-app bg-primary">
+                                    <a href="{{ path('cliente_editar', {'id': cliente.id}) }}" class="btn btn-app bg-primary">
                                        <i class="fas fa-edit"></i> Editar
                                     </a>
-                                    <form method="post" style='display:inline' action="{{ path('unidades_delete', {'id': unidad.id}) }}" onsubmit="return confirm('¿Seguro que desea borrar la unidad seleccionada?');">
-                                       <input type="hidden" name="_method" value="DELETE">
-                                       <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ unidad.id) }}">
-                                       <button class="btn btn-app bg-danger"><i class="fas fa-trash"></i>Borrar</button>
-                                    </form>
                                  </td>
                               </tr>
                            {% else %}
@@ -156,7 +137,7 @@
                      </table>
                   </div>
                   <div class="card-footer clearfix">
-                     {{ knp_pagination_render(unidades) }}
+                     {{ knp_pagination_render(clientes) }}
                   </div>
                   <!-- /.card-body -->
                </div>

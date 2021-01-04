@@ -27,7 +27,7 @@ class TipoUnidad
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $tablaDatos;
+    private $datosVisibles;
 
     /**
      * @ORM\OneToMany(targetEntity=Unidad::class, mappedBy="tipoUnidad")
@@ -52,18 +52,6 @@ class TipoUnidad
     public function setNombre(string $nombre): self
     {
         $this->nombre = $nombre;
-
-        return $this;
-    }
-
-    public function getTablaDatos(): ?string
-    {
-        return $this->tablaDatos;
-    }
-
-    public function setTablaDatos(string $tablaDatos): self
-    {
-        $this->tablaDatos = $tablaDatos;
 
         return $this;
     }
@@ -100,5 +88,17 @@ class TipoUnidad
 
     public function __toString() {
         return $this->nombre;
+    }
+
+    public function getDatosVisibles(): ?string
+    {
+        return $this->datosVisibles;
+    }
+
+    public function setDatosVisibles(string $datosVisibles): self
+    {
+        $this->datosVisibles = $datosVisibles;
+
+        return $this;
     }
 }
