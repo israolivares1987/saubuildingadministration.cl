@@ -45,7 +45,7 @@ class ClienteController extends AbstractController
         $representante = null;
         $email1 = null;
         if ($formFiltro->isSubmitted() && $formFiltro->isValid()) {
-            $nombre = $formFiltro['nombre']->getData();
+            $nombres = $formFiltro['nombres']->getData();
             $representante = $formFiltro['representante']->getData();
             $email1 = $formFiltro['email1']->getData();
         }
