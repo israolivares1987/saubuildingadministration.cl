@@ -5,8 +5,10 @@ namespace App\Controller;
 use App\Entity\Cliente;
 use App\Form\ClienteType;
 use App\Repository\ClienteRepository;
+use App\Repository\UnidadRepository;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,6 +22,7 @@ class ClienteController extends AbstractController
 {
     /**
      * @Route("/", name="clientes_index", methods={"GET"})
+     * @IsGranted("IS_AUTHENTICATED_FULLY")
      */
     public function index(ClienteRepository $clienteRepository, PaginatorInterface $paginator, Request $request): Response
     {
@@ -68,6 +71,7 @@ class ClienteController extends AbstractController
 
     /**
      * @Route("/nuevo", name="cliente_nuevo", methods={"GET","POST"})
+     * @IsGranted("IS_AUTHENTICATED_FULLY")
      */
     public function new(Request $request): Response
     {
@@ -90,7 +94,19 @@ class ClienteController extends AbstractController
     }
 
     /**
+     * @Route("/unidades", name="clientes_unidades")
+     * @IsGranted("IS_AUTHENTICATED_FULLY")
+     */
+    public function unidades(UnidadRepository $unidadRepository, Request $request): Response
+    {
+        return $this->render('cliente/unidades.html.twig', [
+            'unidades' => $unidadRepository->buscarUnidadesClientes()
+        ]);
+    }
+
+    /**
      * @Route("/{id}", name="cliente_ver", methods={"GET"})
+     * @IsGranted("IS_AUTHENTICATED_FULLY")
      */
     public function show(Cliente $cliente): Response
     {
@@ -101,6 +117,7 @@ class ClienteController extends AbstractController
 
     /**
      * @Route("/{id}/editar", name="cliente_editar", methods={"GET","POST"})
+     * @IsGranted("IS_AUTHENTICATED_FULLY")
      */
     public function edit(Request $request, Cliente $cliente): Response
     {
@@ -121,6 +138,7 @@ class ClienteController extends AbstractController
 
     /**
      * @Route("/{id}", name="cliente_delete", methods={"DELETE"})
+     * @IsGranted("IS_AUTHENTICATED_FULLY")
      */
     public function delete(Request $request, Cliente $cliente): Response
     {
@@ -132,4 +150,6 @@ class ClienteController extends AbstractController
 
         return $this->redirectToRoute('cliente_index');
     }
+
+
 }

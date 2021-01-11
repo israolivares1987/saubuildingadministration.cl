@@ -45,6 +45,18 @@ class UnidadRepository extends ServiceEntityRepository
         return $qb->getQuery();
     }
 
+    public function buscarUnidadesClientes() {
+        return $this->createQueryBuilder('u')
+        ->select('t.nombre as tipoUnidad, u.edificio, u.piso, u.unidad, p.nombres as nombrePropietario, p.representante, a.nombres as nombreArrendatario')
+        ->leftJoin('u.tipoUnidad', 't')
+        ->leftJoin('u.propietario', 'pro')
+        ->leftJoin('pro.cliente', 'p')
+        ->leftJoin('u.arrendatario', 'arr')
+        ->leftJoin('arr.cliente', 'a')
+        ->getQuery()
+        ->getResult();
+    }
+
     // /**
     //  * @return Unidad[] Returns an array of Unidad objects
     //  */

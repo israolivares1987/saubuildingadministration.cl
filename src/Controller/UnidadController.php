@@ -11,6 +11,7 @@ use App\Repository\UnidadRepository;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -26,6 +27,7 @@ class UnidadController extends AbstractController
 {
     /**
      * @Route("/", name="unidades_index", methods={"GET", "POST"})
+     * @IsGranted("IS_AUTHENTICATED_FULLY")
      */
     public function index(UnidadRepository $unidadRepository, PaginatorInterface $paginator, Request $request): Response
     {
@@ -92,6 +94,7 @@ class UnidadController extends AbstractController
 
     /**
      * @Route("/nuevo", name="unidades_nuevo", methods={"GET","POST"})
+     * @IsGranted("IS_AUTHENTICATED_FULLY")
      */
     public function new(Request $request): Response
     {
@@ -119,6 +122,7 @@ class UnidadController extends AbstractController
 
     /**
      * @Route("/{id}", name="unidades_ver", methods={"GET"})
+     * @IsGranted("IS_AUTHENTICATED_FULLY")
      */
     public function show(Unidad $unidad): Response
     {
@@ -129,6 +133,7 @@ class UnidadController extends AbstractController
 
     /**
      * @Route("/{id}/editar", name="unidades_editar", methods={"GET","POST"})
+     * @IsGranted("IS_AUTHENTICATED_FULLY")
      */
     public function edit(Request $request, Unidad $unidad): Response
     {
@@ -151,6 +156,7 @@ class UnidadController extends AbstractController
 
     /**
      * @Route("/{id}", name="unidades_delete", methods={"DELETE"})
+     * @IsGranted("IS_AUTHENTICATED_FULLY")
      */
     public function delete(Request $request, Unidad $unidad): Response
     {

@@ -50,6 +50,14 @@
             </div>
           </div>
         </div>
+        <div class="input-group mb-3">
+          <input type="text" class="form-control" placeholder="Empresa" name="empresa" id="inputEmpresa" required>
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-building"></span>
+            </div>
+          </div>
+        </div>
         
         {#
             Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
@@ -65,7 +73,7 @@
         <div class="row">
           <div class="col-8">
             <div class="icheck-primary">
-              <input type="checkbox" id="remember">
+              <input type="checkbox" name="_remember_me" id="remember">
               <label for="remember">
                 Recordarme
               </label>

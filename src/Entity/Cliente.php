@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ClienteRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -86,6 +88,28 @@ class Cliente
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $rol;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Propietario::class, mappedBy="cliente")
+     */
+    private $propietarios;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Arrendatario::class, mappedBy="cliente")
+     */
+    private $arrendatarios;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Corredora::class, mappedBy="cliente")
+     */
+    private $corredoras;
+
+    public function __construct()
+    {
+        $this->propietarios = new ArrayCollection();
+        $this->arrendatarios = new ArrayCollection();
+        $this->corredoras = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -256,6 +280,96 @@ class Cliente
     public function setRol(?string $rol): self
     {
         $this->rol = $rol;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Propietario[]
+     */
+    public function getPropietarios(): Collection
+    {
+        return $this->propietarios;
+    }
+
+    public function addPropietario(Propietario $propietario): self
+    {
+        if (!$this->propietarios->contains($propietario)) {
+            $this->propietarios[] = $propietario;
+            $propietario->setCliente($this);
+        }
+
+        return $this;
+    }
+
+    public function removePropietario(Propietario $propietario): self
+    {
+        if ($this->propietarios->removeElement($propietario)) {
+            // set the owning side to null (unless already changed)
+            if ($propietario->getCliente() === $this) {
+                $propietario->setCliente(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Arrendatario[]
+     */
+    public function getArrendatarios(): Collection
+    {
+        return $this->arrendatarios;
+    }
+
+    public function addArrendatario(Arrendatario $arrendatario): self
+    {
+        if (!$this->arrendatarios->contains($arrendatario)) {
+            $this->arrendatarios[] = $arrendatario;
+            $arrendatario->setCliente($this);
+        }
+
+        return $this;
+    }
+
+    public function removeArrendatario(Arrendatario $arrendatario): self
+    {
+        if ($this->arrendatarios->removeElement($arrendatario)) {
+            // set the owning side to null (unless already changed)
+            if ($arrendatario->getCliente() === $this) {
+                $arrendatario->setCliente(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Corredora[]
+     */
+    public function getCorredoras(): Collection
+    {
+        return $this->corredoras;
+    }
+
+    public function addCorredora(Corredora $corredora): self
+    {
+        if (!$this->corredoras->contains($corredora)) {
+            $this->corredoras[] = $corredora;
+            $corredora->setCliente($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCorredora(Corredora $corredora): self
+    {
+        if ($this->corredoras->removeElement($corredora)) {
+            // set the owning side to null (unless already changed)
+            if ($corredora->getCliente() === $this) {
+                $corredora->setCliente(null);
+            }
+        }
 
         return $this;
     }

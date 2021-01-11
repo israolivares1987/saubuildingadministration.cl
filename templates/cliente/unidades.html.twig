@@ -1,0 +1,152 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}{{parent()}} - Clientes-Unidades{% endblock %}
+
+{% block content %}
+<div class="content-wrapper">
+   <!-- Content Header (Page header) -->
+   <div class="content-header">
+      <div class="container-fluid">
+         <div class="row mb-2">
+            <div class="col-sm-6">
+               <h1 class="m-0">Clientes</h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+               <ol class="breadcrumb float-sm-right">
+                  <li class="breadcrumb-item"><a href="{{ path('dashboard') }}">Dashboard</a></li>
+                  <li class="breadcrumb-item active">Clientes-Unidades</li>
+               </ol>
+            </div><!-- /.col -->
+         </div><!-- /.row -->
+      </div><!-- /.container-fluid -->
+   </div>
+   <!-- /.content-header -->
+
+   <!-- Main content -->
+   <div class="content">
+      <div class="container-fluid">
+         <div class="row">
+            {% for message in app.flashes('cliente_success') %}
+               <div class="col-12">
+                  <div class="card card-success">
+                  <div class="card-header">
+                     <h3 class="card-title">¡Exitoso!</h3>
+
+                     <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-times"></i>
+                        </button>
+                     </div>
+                     <!-- /.card-tools -->
+                  </div>
+                  <!-- /.card-header -->
+                  <div class="card-body">
+                     {{message}}
+                  </div>
+                  <!-- /.card-body -->
+                  </div>
+                  <!-- /.card -->
+               </div>
+            {% endfor %}
+            {# <a href="{{ path('cliente_nuevo') }}" class="btn btn-app bg-success">
+               <i class="fas fa-plus"></i> Nuevo
+            </a> #}
+            {# <div class="col-12">
+               <div class="card card-primary">
+                  <div class="card-header">
+                     <h3 class="card-title">Filtros</h3>
+                  </div>
+                  {{form_start(formFiltro)}}
+                     <div class="card-body">
+                        <div class="row">
+                           <div class="col-3">
+                              <div class="form-group">
+                                 {{ form_row(formFiltro.nombres) }}
+                              </div>
+                           </div>
+                           <div class="col-3">
+                              <div class="form-group">
+                                 {{ form_row(formFiltro.email1) }}
+                              </div>
+                           </div>
+                           <div class="col-3">
+                              <div class="form-group">
+                                 {{ form_row(formFiltro.representante) }}
+                              </div>
+                           </div>
+                           <div class="col-3">
+                              <div class="form-group">
+                                 <label>&nbsp;</label>
+                                 {{ form_row(formFiltro.filtrar) }}
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  {{ form_end(formFiltro) }}
+                  <!-- /.card-body -->
+               </div>
+            </div> #}
+            <div class="col-12">
+               <div class="card">
+                  <div class="card-header">
+                     <h3 class="card-title">Listado de Clientes-Unidades</h3>
+
+                     {# <div class="card-tools">
+                        <div class="input-group input-group-sm" style="width: 150px;">
+                        <input type="text" name="table_search" class="form-control float-right" placeholder="Buscar">
+
+                        <div class="input-group-append">
+                           <button type="submit" class="btn btn-default">
+                              <i class="fas fa-search"></i>
+                           </button>
+                        </div>
+                        </div>
+                     </div> #}
+                  </div>
+                  <!-- /.card-header -->
+                  <div class="card-body table-responsive p-0">
+                     <table class="table table-hover text-nowrap">
+                        <thead>
+                        <tr>
+                           <th>Tipo</th>
+                           <th>Edificio</th>
+                           <th>Piso</th>
+                           <th>Unidad</th>
+                           <th>Dueño</th>
+                           <th>Representante</th>
+                           <th>Arendatario</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                           {% for unidad in unidades %}
+                              <tr>
+                                 <td>{{ unidad.tipoUnidad }}</td>
+                                 <td>{{ unidad.edificio }}</td>
+                                 <td>{{ unidad.piso }}</td>
+                                 <td>{{ unidad.unidad }}</td>
+                                 <td>{{ unidad.nombrePropietario }}</td>
+                                 {# <td>{{ unidad.propietario.cliente.representante | default("") }}</td> #}
+                                 <td>{{ unidad.nombreRepresentante | default("") }}</td>
+                                 <td>{{ unidad.nombreArrendatario}}</td>
+                              </tr>
+                           {% else %}
+                              <tr>
+                                 <td colspan="6">No hay registros para mostrar</td>
+                              </tr>
+                           {% endfor %}
+                        </tbody>
+                     </table>
+                  </div>
+                  {# <div class="card-footer clearfix">
+                     {{ knp_pagination_render(clientes) }}
+                  </div> #}
+                  <!-- /.card-body -->
+               </div>
+               <!-- /.card -->
+            </div>
+         </div>
+         <!-- /.row -->
+      </div><!-- /.container-fluid -->
+   </div>
+   <!-- /.content -->
+</div>
+{% endblock %}

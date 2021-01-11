@@ -216,9 +216,9 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="{{ path('clientes_unidades') }}" {% if route_name == "clientes_unidades" %} class="nav-link active" {% else %} class="nav-link" {% endif %}>
                 <i class="far fa-circle nav-icon"></i>
-                <p>Gastos Comunes</p>
+                <p>Clientes-Unidades</p>
                 </a>
             </li>
             </ul>
