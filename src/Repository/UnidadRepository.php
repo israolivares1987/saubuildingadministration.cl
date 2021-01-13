@@ -22,14 +22,16 @@ class UnidadRepository extends ServiceEntityRepository
 
     public function buscarUnidadesPaginador(TipoUnidad $tipoUnidad = null, $edificio = null, $piso = null, $unidad = null, $estado = null) {
         $qb = $this->createQueryBuilder('u')
-        ->select('u.id, t.nombre as tipoUnidad, u.edificio, u.piso, u.unidad, u.estado')
+        ->select('u.id, t.nombre as tipoUnidad, c.nombre as edificio, u.piso, u.unidad, u.estado')
+        ->innerJoin('u.conjunto', 'c')
         ->innerJoin('u.tipoUnidad', 't');
 
         if($tipoUnidad != null){
             $qb->andWhere('u.tipoUnidad = '.$tipoUnidad->getId());
         }
         if($edificio != null){
-            $qb->andWhere('u.edificio = '.$edificio);
+            $qb->andWhere('c.nombre LIKE :edificio');
+            $qb->setParameter('edificio', '%'.$edificio.'%');
         }
         if($piso != null){
             $qb->andWhere('u.piso = '.$piso);
@@ -47,7 +49,8 @@ class UnidadRepository extends ServiceEntityRepository
 
     public function buscarUnidadesClientes() {
         return $this->createQueryBuilder('u')
-        ->select('t.nombre as tipoUnidad, u.edificio, u.piso, u.unidad, p.nombres as nombrePropietario, p.representante, a.nombres as nombreArrendatario')
+        ->select('t.nombre as tipoUnidad, c.nombre as edificio, u.piso, u.unidad, p.nombres as nombrePropietario, p.representante, a.nombres as nombreArrendatario')
+        ->leftJoin('u.conjunto', 'c')
         ->leftJoin('u.tipoUnidad', 't')
         ->leftJoin('u.propietario', 'pro')
         ->leftJoin('pro.cliente', 'p')

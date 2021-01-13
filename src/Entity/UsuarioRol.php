@@ -35,10 +35,9 @@ class UsuarioRol
     private $usuario;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Empresa::class, inversedBy="usuarioRols")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\ManyToOne(targetEntity=Comunidad::class, inversedBy="usuarioRoles")
      */
-    private $empresa;
+    private $comunidad;
 
     public function getId(): ?int
     {
@@ -81,15 +80,16 @@ class UsuarioRol
         return $this;
     }
 
-    public function getEmpresa(): ?Empresa
+    public function getComunidad(): ?Comunidad
     {
-        return $this->empresa;
+        return $this->comunidad;
     }
 
-    public function setEmpresa(?Empresa $empresa): self
+    public function setComunidad(?Comunidad $comunidad): self
     {
-        $this->empresa = $empresa;
+        $this->comunidad = $comunidad;
 
         return $this;
     }
+
 }

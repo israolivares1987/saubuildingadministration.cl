@@ -23,12 +23,6 @@ class Unidad
     /**
      * @ORM\Column(type="string", length=10, nullable=true)
      * @Assert\NotBlank(message = "No puede ser vacio.")
-     */
-    private $edificio;
-
-    /**
-     * @ORM\Column(type="string", length=10, nullable=true)
-     * @Assert\NotBlank(message = "No puede ser vacio.")
      * @Assert\NotEqualTo(value = 0, message = "No puede ser {{ compared_value }}"
      * )
      */
@@ -44,11 +38,6 @@ class Unidad
      * @ORM\Column(type="boolean")
      */
     private $estado;
-
-    /**
-     * @ORM\ManyToOne(targetEntity=Empresa::class, inversedBy="unidades")
-     */
-    private $empresa;
 
     /**
      * @ORM\ManyToOne(targetEntity=TipoUnidad::class, inversedBy="unidades")
@@ -78,6 +67,11 @@ class Unidad
      */
     private $corredoras;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Conjunto::class, inversedBy="unidades")
+     */
+    private $conjunto;
+
     public function __construct()
     {
         $this->estado = true;
@@ -87,18 +81,6 @@ class Unidad
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getEdificio(): ?string
-    {
-        return $this->edificio;
-    }
-
-    public function setEdificio(?string $edificio): self
-    {
-        $this->edificio = $edificio;
-
-        return $this;
     }
 
     public function getPiso(): ?string
@@ -133,18 +115,6 @@ class Unidad
     public function setEstado(bool $estado): self
     {
         $this->estado = $estado;
-
-        return $this;
-    }
-
-    public function getEmpresa(): ?Empresa
-    {
-        return $this->empresa;
-    }
-
-    public function setEmpresa(?Empresa $empresa): self
-    {
-        $this->empresa = $empresa;
 
         return $this;
     }
@@ -248,6 +218,18 @@ class Unidad
                 $corredora->setUnidad(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getConjunto(): ?Conjunto
+    {
+        return $this->conjunto;
+    }
+
+    public function setConjunto(?Conjunto $conjunto): self
+    {
+        $this->conjunto = $conjunto;
 
         return $this;
     }

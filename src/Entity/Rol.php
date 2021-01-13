@@ -30,18 +30,12 @@ class Rol
     private $estado;
 
     /**
-     * @ORM\OneToMany(targetEntity=RolPermiso::class, mappedBy="rol")
-     */
-    private $rolPermisos;
-
-    /**
      * @ORM\OneToMany(targetEntity=UsuarioRol::class, mappedBy="rol")
      */
     private $usuarioRols;
 
     public function __construct()
     {
-        $this->rolPermisos = new ArrayCollection();
         $this->usuarioRols = new ArrayCollection();
     }
 
@@ -70,36 +64,6 @@ class Rol
     public function setEstado(bool $estado): self
     {
         $this->estado = $estado;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|RolPermiso[]
-     */
-    public function getRolPermisos(): Collection
-    {
-        return $this->rolPermisos;
-    }
-
-    public function addRolPermiso(RolPermiso $rolPermiso): self
-    {
-        if (!$this->rolPermisos->contains($rolPermiso)) {
-            $this->rolPermisos[] = $rolPermiso;
-            $rolPermiso->setRol($this);
-        }
-
-        return $this;
-    }
-
-    public function removeRolPermiso(RolPermiso $rolPermiso): self
-    {
-        if ($this->rolPermisos->removeElement($rolPermiso)) {
-            // set the owning side to null (unless already changed)
-            if ($rolPermiso->getRol() === $this) {
-                $rolPermiso->setRol(null);
-            }
-        }
 
         return $this;
     }

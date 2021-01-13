@@ -2,15 +2,15 @@
 
 namespace App\Entity;
 
-use App\Repository\EmpresaRepository;
+use App\Repository\ConjuntoRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass=EmpresaRepository::class)
+ * @ORM\Entity(repositoryClass=ConjuntoRepository::class)
  */
-class Empresa
+class Conjunto
 {
     /**
      * @ORM\Id
@@ -30,23 +30,22 @@ class Empresa
     private $estado;
 
     /**
-     * @ORM\OneToMany(targetEntity=UsuarioRol::class, mappedBy="empresa")
+     * @ORM\ManyToOne(targetEntity=TipoConjunto::class, inversedBy="conjuntos")
      */
-    private $usuarioRols;
+    private $tipoConjunto;
 
     /**
-     * @ORM\OneToMany(targetEntity=Unidad::class, mappedBy="empresa")
+     * @ORM\ManyToOne(targetEntity=Comunidad::class, inversedBy="conjuntos")
+     */
+    private $comunidad;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Unidad::class, mappedBy="conjunto")
      */
     private $unidades;
 
-    /**
-     * @ORM\Column(type="integer")
-     */
-    private $codigo;
-
     public function __construct()
     {
-        $this->usuarioRols = new ArrayCollection();
         $this->unidades = new ArrayCollection();
     }
 
@@ -79,32 +78,26 @@ class Empresa
         return $this;
     }
 
-    /**
-     * @return Collection|UsuarioRol[]
-     */
-    public function getUsuarioRols(): Collection
+    public function getTipoConjunto(): ?TipoConjunto
     {
-        return $this->usuarioRols;
+        return $this->tipoConjunto;
     }
 
-    public function addUsuarioRol(UsuarioRol $usuarioRol): self
+    public function setTipoConjunto(?TipoConjunto $tipoConjunto): self
     {
-        if (!$this->usuarioRols->contains($usuarioRol)) {
-            $this->usuarioRols[] = $usuarioRol;
-            $usuarioRol->setEmpresa($this);
-        }
+        $this->tipoConjunto = $tipoConjunto;
 
         return $this;
     }
 
-    public function removeUsuarioRol(UsuarioRol $usuarioRol): self
+    public function getComunidad(): ?Comunidad
     {
-        if ($this->usuarioRols->removeElement($usuarioRol)) {
-            // set the owning side to null (unless already changed)
-            if ($usuarioRol->getEmpresa() === $this) {
-                $usuarioRol->setEmpresa(null);
-            }
-        }
+        return $this->comunidad;
+    }
+
+    public function setComunidad(?Comunidad $comunidad): self
+    {
+        $this->comunidad = $comunidad;
 
         return $this;
     }
@@ -121,7 +114,7 @@ class Empresa
     {
         if (!$this->unidades->contains($unidade)) {
             $this->unidades[] = $unidade;
-            $unidade->setEmpresa($this);
+            $unidade->setConjunto($this);
         }
 
         return $this;
@@ -131,27 +124,11 @@ class Empresa
     {
         if ($this->unidades->removeElement($unidade)) {
             // set the owning side to null (unless already changed)
-            if ($unidade->getEmpresa() === $this) {
-                $unidade->setEmpresa(null);
+            if ($unidade->getConjunto() === $this) {
+                $unidade->setConjunto(null);
             }
         }
 
         return $this;
-    }
-
-    public function getCodigo(): ?int
-    {
-        return $this->codigo;
-    }
-
-    public function setCodigo(int $codigo): self
-    {
-        $this->codigo = $codigo;
-
-        return $this;
-    }
-
-    public function __toString() {
-        return $this->nombre;
     }
 }
