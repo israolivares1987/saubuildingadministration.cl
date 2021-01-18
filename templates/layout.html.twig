@@ -147,10 +147,10 @@
         <!-- Sidebar user panel (optional) -->
         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
             <div class="image">
-            <img src="{{ asset('dist/img/user2-160x160.jpg') }}" class="img-circle elevation-2" alt="User Image">
+            <img src="{{ asset('dist/img/blank-profile.jpg') }}" class="img-circle elevation-2" alt="User Image">
             </div>
             <div class="info">
-            <a href="#" class="d-block">SAU ADMIN</a>
+            <a href="#" class="d-block">{{app.user.username}}</a>
             </div>
         </div>
 
@@ -203,18 +203,31 @@
                 </li>
                 </ul>
             </li> #}
-            <li class="nav-item">
-                <a href="{{ path('unidades_index') }}"  {% if route_name == "unidades_index" %} class="nav-link active" {% else %} class="nav-link" {% endif %}>
-                <i class="far fa-building nav-icon"></i>
-                <p>Unidades</p>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="{{ path('clientes_index') }}" {% if route_name == "clientes_index" %} class="nav-link active" {% else %} class="nav-link" {% endif %}>
+
+            <li {% if route_name matches "{^mantenedores}" %} class="nav-item menu-open" {% else %} class="nav-item" {% endif %}>
+                <a href="#" {% if route_name matches "{^mantenedores}" %} class="nav-link active" {% else %} class="nav-link" {% endif %}>
                 <i class="nav-icon fas fa-th"></i>
-                <p>Clientes</p>
+                <p>
+                    Mantenedores
+                    <i class="right fas fa-angle-left"></i>
+                </p>
                 </a>
+                <ul class="nav nav-treeview">
+                    <li class="nav-item">
+                        <a href="{{ path('mantenedores_unidades_index') }}"  {% if route_name == "mantenedores_unidades_index" %} class="nav-link active" {% else %} class="nav-link" {% endif %}>
+                        <i class="far fa-building nav-icon"></i>
+                        <p>Unidades</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ path('mantenedores_clientes_index') }}" {% if route_name == "mantenedores_clientes_index" %} class="nav-link active" {% else %} class="nav-link" {% endif %}>
+                        <i class="nav-icon fas fa-th"></i>
+                        <p>Clientes</p>
+                        </a>
+                    </li>
+                </ul>
             </li>
+
             <li class="nav-item">
                 <a href="{{ path('clientes_unidades') }}" {% if route_name == "clientes_unidades" %} class="nav-link active" {% else %} class="nav-link" {% endif %}>
                 <i class="far fa-circle nav-icon"></i>

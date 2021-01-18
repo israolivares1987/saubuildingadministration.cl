@@ -18,7 +18,7 @@
 								<a href="{{ path('dashboard') }}">Dashboard</a>
 							</li>
 							<li class="breadcrumb-item">
-								<a href="{{ path('unidades_index') }}">Unidades</a>
+								<a href="{{ path('mantenedores_unidades_index') }}">Unidades</a>
 							</li>
 							<li class="breadcrumb-item active">Editar Unidad</li>
 						</ol>
@@ -45,7 +45,7 @@
 							<div class="card-body">
 								<div class="row">
 									<div class='col-md-6'>
-										{{ form_row(form.edificio) }}
+										{{ form_row(form.conjunto) }}
 										{{ form_row(form.piso) }}
 										{{ form_row(form.unidad) }}
 										{{ form_row(form.tipoUnidad) }}

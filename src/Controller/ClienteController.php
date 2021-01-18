@@ -21,7 +21,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class ClienteController extends AbstractController
 {
     /**
-     * @Route("/", name="clientes_index", methods={"GET"})
+     * @Route("/", name="mantenedores_clientes_index", methods={"GET"})
      * @IsGranted("IS_AUTHENTICATED_FULLY")
      */
     public function index(ClienteRepository $clienteRepository, PaginatorInterface $paginator, Request $request): Response
@@ -84,7 +84,7 @@ class ClienteController extends AbstractController
             $entityManager->persist($cliente);
             $entityManager->flush();
 
-            return $this->redirectToRoute('cliente_index');
+            return $this->redirectToRoute('mantenedores_clientes_index');
         }
 
         return $this->render('cliente/new.html.twig', [
@@ -99,7 +99,7 @@ class ClienteController extends AbstractController
      */
     public function unidades(UnidadRepository $unidadRepository, Request $request): Response
     {
-        return $this->render('cliente/unidades.html.twig', [
+        return $this->render('cliente/clientes-unidades.html.twig', [
             'unidades' => $unidadRepository->buscarUnidadesClientes()
         ]);
     }
@@ -127,7 +127,7 @@ class ClienteController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('cliente_index');
+            return $this->redirectToRoute('mantenedores_clientes_index');
         }
 
         return $this->render('cliente/edit.html.twig', [
@@ -148,7 +148,7 @@ class ClienteController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('cliente_index');
+        return $this->redirectToRoute('mantenedores_clientes_index');
     }
 
 

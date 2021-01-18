@@ -18,7 +18,7 @@
 								<a href="{{ path('dashboard') }}">Dashboard</a>
 							</li>
 							<li class="breadcrumb-item">
-								<a href="{{ path('unidades_index') }}">Unidades</a>
+								<a href="{{ path('mantenedores_unidades_index') }}">Unidades</a>
 							</li>
 							<li class="breadcrumb-item active">Editar Unidad</li>
 						</ol>
@@ -34,8 +34,8 @@
 		<div class="content">
 			<div class="container-fluid">
                 <div class="row">
-					<div class="col-md-4"></div>
-					<div class="col-md-4">
+					<div class="col-md-2"></div>
+					<div class="col-md-8">
                         <div class="card card-primary">
 							<div class="card-header">
                 			    <h3 class="card-title">Detalle Unidad</h3>
@@ -43,8 +43,8 @@
 							<table class="table">
                                 <tbody>
                                     <tr>
-                                        <th>Edificio</th>
-                                        <td>{{ unidad.edificio }}</td>
+                                        <th>Conjunto o Edificio</th>
+                                        <td>{{ unidad.conjunto }}</td>
                                         <th>Piso</th>
                                         <td>{{ unidad.piso }}</td>
                                     </tr>
@@ -76,7 +76,7 @@
                                     <tr>
                                         <th>Acciones</th>
                                         <td colspan='3'>
-                                            <a href="{{ path('unidades_index') }}" class="btn btn-app bg-secondary">
+                                            <a href="{{ path('mantenedores_unidades_index') }}" class="btn btn-app bg-secondary">
                                                 <i class="fas fa-arrow-left"></i> Volver
                                             </a>
                                             <a href="{{ path('unidades_editar', {'id': unidad.id}) }}" class="btn btn-app bg-primary">
@@ -88,7 +88,7 @@
                             </table>
 						</div>                        
                     </div>
-                    <div class="col-md-4"></div>
+                    <div class="col-md-2"></div>
                 </div>
             </div>
 			<!-- /.container-fluid -->

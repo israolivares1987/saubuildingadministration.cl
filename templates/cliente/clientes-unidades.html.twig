@@ -113,7 +113,7 @@
                            <th>Unidad</th>
                            <th>Dueño</th>
                            <th>Representante</th>
-                           <th>Arendatario</th>
+                           <th>Acciones</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -125,8 +125,8 @@
                                  <td>{{ unidad.unidad }}</td>
                                  <td>{{ unidad.nombrePropietario }}</td>
                                  {# <td>{{ unidad.propietario.cliente.representante | default("") }}</td> #}
-                                 <td>{{ unidad.nombreRepresentante | default("") }}</td>
-                                 <td>{{ unidad.nombreArrendatario}}</td>
+                                 <td>{{ unidad.nombreRepresentante }}</td>
+                                 <td></td>
                               </tr>
                            {% else %}
                               <tr>

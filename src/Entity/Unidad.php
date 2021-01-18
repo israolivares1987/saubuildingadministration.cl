@@ -69,6 +69,8 @@ class Unidad
 
     /**
      * @ORM\ManyToOne(targetEntity=Conjunto::class, inversedBy="unidades")
+     * @Assert\Type(type="App\Entity\Conjunto")
+     * @Assert\NotBlank(message = "No puede ser vacio.")
      */
     private $conjunto;
 

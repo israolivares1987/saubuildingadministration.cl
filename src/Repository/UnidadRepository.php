@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Conjunto;
 use App\Entity\TipoUnidad;
 use App\Entity\Unidad;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -20,18 +21,17 @@ class UnidadRepository extends ServiceEntityRepository
         parent::__construct($registry, Unidad::class);
     }
 
-    public function buscarUnidadesPaginador(TipoUnidad $tipoUnidad = null, $edificio = null, $piso = null, $unidad = null, $estado = null) {
+    public function buscarUnidadesPaginador(TipoUnidad $tipoUnidad = null, Conjunto $conjunto = null, $piso = null, $unidad = null, $estado = null) {
         $qb = $this->createQueryBuilder('u')
         ->select('u.id, t.nombre as tipoUnidad, c.nombre as edificio, u.piso, u.unidad, u.estado')
-        ->innerJoin('u.conjunto', 'c')
+        ->leftJoin('u.conjunto', 'c')
         ->innerJoin('u.tipoUnidad', 't');
 
         if($tipoUnidad != null){
             $qb->andWhere('u.tipoUnidad = '.$tipoUnidad->getId());
         }
-        if($edificio != null){
-            $qb->andWhere('c.nombre LIKE :edificio');
-            $qb->setParameter('edificio', '%'.$edificio.'%');
+        if($conjunto != null){
+            $qb->andWhere('u.conjunto = '.$conjunto->getId());
         }
         if($piso != null){
             $qb->andWhere('u.piso = '.$piso);
@@ -49,7 +49,7 @@ class UnidadRepository extends ServiceEntityRepository
 
     public function buscarUnidadesClientes() {
         return $this->createQueryBuilder('u')
-        ->select('t.nombre as tipoUnidad, c.nombre as edificio, u.piso, u.unidad, p.nombres as nombrePropietario, p.representante, a.nombres as nombreArrendatario')
+        ->select('t.nombre as tipoUnidad, c.nombre as edificio, u.piso, u.unidad, p.nombres as nombrePropietario, p.representante as nombreRepresentante, a.nombres as nombreArrendatario')
         ->leftJoin('u.conjunto', 'c')
         ->leftJoin('u.tipoUnidad', 't')
         ->leftJoin('u.propietario', 'pro')

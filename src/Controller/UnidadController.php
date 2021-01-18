@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Entity\Empresa;
+use App\Entity\Conjunto;
 use App\Entity\TipoUnidad;
 use App\Entity\Unidad;
 use App\Form\UnidadType;
@@ -26,7 +26,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class UnidadController extends AbstractController
 {
     /**
-     * @Route("/", name="unidades_index", methods={"GET", "POST"})
+     * @Route("/", name="mantenedores_unidades_index", methods={"GET", "POST"})
      * @IsGranted("IS_AUTHENTICATED_FULLY")
      */
     public function index(UnidadRepository $unidadRepository, PaginatorInterface $paginator, Request $request): Response
@@ -39,7 +39,11 @@ class UnidadController extends AbstractController
                 'label' => 'Tipo Unidad',
                 'required' => false
             ])
-            ->add('edificio', TextType::class, [
+            ->add('conjunto', EntityType::class, [
+                'class' => Conjunto::class,
+                'choice_label' => 'nombre',
+                'placeholder' => 'Seleccione...',
+                'label' => 'Conjunto o Edificio',
                 'required' => false
             ])
             ->add('piso', IntegerType::class, [
@@ -64,18 +68,18 @@ class UnidadController extends AbstractController
         
         $formFiltro->handleRequest($request);
         $tipoUnidad = null;
-        $edificio = null;
+        $conjunto = null;
         $piso = null;
         $unidad = null;
         $estado = null;
         if ($formFiltro->isSubmitted() && $formFiltro->isValid()) {
             $tipoUnidad = $formFiltro['tipoUnidad']->getData();
-            $edificio = $formFiltro['edificio']->getData();
+            $conjunto = $formFiltro['conjunto']->getData();
             $piso = $formFiltro['piso']->getData();
             $unidad = $formFiltro['unidad']->getData();
             $estado = $formFiltro['estado']->getData();
         }
-        $query = $unidadRepository->buscarUnidadesPaginador($tipoUnidad, $edificio, $piso, $unidad, $estado);
+        $query = $unidadRepository->buscarUnidadesPaginador($tipoUnidad, $conjunto, $piso, $unidad, $estado);
         $pagination = $paginator->paginate(
             $query, /* query NOT result */
             $request->query->getInt('page', 1), /*page number*/
@@ -104,14 +108,12 @@ class UnidadController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
-            $empresa = $entityManager->getRepository(Empresa::class)->find(1);
-            $unidad->setEmpresa($empresa);
             $entityManager->persist($unidad);
             $entityManager->flush();
 
             $this->addFlash('unidad_success', 'Se creó la unidad');
 
-            return $this->redirectToRoute('unidades_index');
+            return $this->redirectToRoute('mantenedores_unidades_index');
         }
 
         return $this->render('unidad/nuevo.html.twig', [
@@ -145,7 +147,7 @@ class UnidadController extends AbstractController
 
             $this->addFlash('unidad_success', 'Se actualizó la unidad');
 
-            return $this->redirectToRoute('unidades_index');
+            return $this->redirectToRoute('mantenedores_unidades_index');
         }
 
         return $this->render('unidad/editar.html.twig', [
@@ -166,6 +168,6 @@ class UnidadController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('unidades_index');
+        return $this->redirectToRoute('mantenedores_unidades_index');
     }
 }
