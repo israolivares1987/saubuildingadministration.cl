@@ -1,0 +1,6 @@
+table thead {
+    background-color: rgba(0,0,0,.075);
+}
+table thead th {
+    text-align: center !important;
+}

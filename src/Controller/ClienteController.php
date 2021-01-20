@@ -3,12 +3,15 @@
 namespace App\Controller;
 
 use App\Entity\Cliente;
+use App\Entity\Conjunto;
+use App\Entity\TipoUnidad;
 use App\Form\ClienteType;
 use App\Repository\ClienteRepository;
 use App\Repository\UnidadRepository;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
@@ -99,8 +102,48 @@ class ClienteController extends AbstractController
      */
     public function unidades(UnidadRepository $unidadRepository, Request $request): Response
     {
+        $formFiltro = $this->createFormBuilder()
+            ->add('conjunto', EntityType::class, [
+                'class' => Conjunto::class,
+                'choice_label' => 'nombre',
+                'placeholder' => 'Seleccione...',
+                'label' => 'Conjunto o Edificio',
+                'required' => false
+            ])
+            ->add('tipoUnidad', EntityType::class, [
+                'class' => TipoUnidad::class,
+                'choice_label' => 'nombre',
+                'placeholder' => 'Seleccione...',
+                'label' => 'Tipo de Unidad',
+                'required' => false
+            ])
+            ->add('unidad', TextType::class, [
+                'required' => false
+            ])
+            ->add('persona', TextType::class, [
+                'required' => false,
+                'label' => 'Nombre de la Persona'
+            ])
+            ->add('filtrar', SubmitType::class, [
+                'attr' => ['class' =>'btn btn-primary btn-block'],
+                'label' => 'Filtrar'
+            ])
+            ->getForm();
+        $formFiltro->handleRequest($request);
+        $conjunto = null;
+        $tipoUnidad = null;
+        $unidad = null;
+        $persona = null;
+        if ($formFiltro->isSubmitted() && $formFiltro->isValid()) {
+            $conjunto = $formFiltro['conjunto']->getData();
+            $tipoUnidad = $formFiltro['tipoUnidad']->getData();
+            $unidad = $formFiltro['unidad']->getData();
+            $persona = $formFiltro['persona']->getData();
+        }
+        $unidades = $unidadRepository->buscarUnidadesClientes($conjunto, $tipoUnidad, $unidad, $persona);
         return $this->render('cliente/clientes-unidades.html.twig', [
-            'unidades' => $unidadRepository->buscarUnidadesClientes()
+            'unidades' => $unidades,
+            'formFiltro' => $formFiltro->createView()
         ]);
     }
 
