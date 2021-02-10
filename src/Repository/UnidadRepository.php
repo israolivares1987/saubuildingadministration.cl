@@ -87,6 +87,8 @@ class UnidadRepository extends ServiceEntityRepository
             $qb->andWhere('p.nombres LIKE :nombres OR p.representante LIKE :nombres');
             $qb->setParameter('nombres', '%'.$persona.'%');
         }
+        $qb->orderBy('u.id', 'asc');
+        
         
         return $qb->getQuery()->getResult();
     }
