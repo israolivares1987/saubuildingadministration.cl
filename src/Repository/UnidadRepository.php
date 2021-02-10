@@ -49,11 +49,31 @@ class UnidadRepository extends ServiceEntityRepository
 
     public function buscarUnidadesClientes(Conjunto $conjunto = null, TipoUnidad $tipoUnidad = null, $unidad = null, $persona = null) {
         $qb = $this->createQueryBuilder('u')
-        ->select('t.nombre as tipoUnidad, c.nombre as edificio, u.piso, u.unidad, p.nombres as nombrePropietario, p.representante as nombreRepresentante, p.email1, p.email2 ')
-        ->leftJoin('u.conjunto', 'c')
-        ->leftJoin('u.tipoUnidad', 't')
-        ->leftJoin('u.propietario', 'pro')
-        ->leftJoin('pro.cliente', 'p');
+        ->select('
+            t.nombre as tipoUnidad,
+            c.nombre as edificio, 
+            u.piso, 
+            u.unidad, 
+            p.nombres as nombrePropietario, 
+            p.representante as nombreRepresentante, 
+            p.email1, 
+            p.email2,
+            co.factor,
+            co.mensual,
+            co.fondoReserva,
+            co.adicional,
+            coht.nombre as unidadHija_tipoUnidad, 
+            cohc.nombre as unidadHija_edificio,
+            coh.piso as unidadHija_piso,
+            coh.unidad as unidadHija_unidad')
+        ->leftJoin('u.tipoUnidad', 't') //join tipo unidad
+        ->leftJoin('u.conjunto', 'c') //join conjunto
+        ->leftJoin('u.propietario', 'pro') //join con propietario
+        ->leftJoin('pro.cliente', 'p') //join con cliente segun id propietario
+        ->leftJoin('u.cobro', 'co') //join con cobro de unidad
+        ->leftJoin('co.unidadHija', 'coh') //join con unidad hija de cobro de unidad
+        ->leftJoin('coh.tipoUnidad', 'coht') //join con tipo de unidad hija de cobro de unidad
+        ->leftJoin('coh.conjunto', 'cohc'); //Join con conjunto de unidad hija de cobro de unidad
         if($tipoUnidad != null){
             $qb->andWhere('u.tipoUnidad = '.$tipoUnidad->getId());
         }

@@ -20371,7 +20371,15 @@ html.maximized-card {
   transform: rotate(90deg);
 }
 
+[data-widget="expandable-table"][aria-expanded="true"] td > div > button > i[class*="right"] {
+  transform: rotate(90deg);
+}
+
 [data-widget="expandable-table"][aria-expanded="true"] td > i[class*="left"] {
+  transform: rotate(-90deg);
+}
+
+[data-widget="expandable-table"][aria-expanded="true"] td > div > button > i[class*="left"] {
   transform: rotate(-90deg);
 }
 

@@ -74,6 +74,11 @@ class Unidad
      */
     private $conjunto;
 
+    /**
+     * @ORM\OneToOne(targetEntity=Cobro::class, mappedBy="unidad", cascade={"persist", "remove"})
+     */
+    private $cobro;
+
     public function __construct()
     {
         $this->estado = true;
@@ -232,6 +237,28 @@ class Unidad
     public function setConjunto(?Conjunto $conjunto): self
     {
         $this->conjunto = $conjunto;
+
+        return $this;
+    }
+
+    public function getCobro(): ?Cobro
+    {
+        return $this->cobro;
+    }
+
+    public function setCobro(?Cobro $cobro): self
+    {
+        // unset the owning side of the relation if necessary
+        if ($cobro === null && $this->cobro !== null) {
+            $this->cobro->setUnidad(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($cobro !== null && $cobro->getUnidad() !== $this) {
+            $cobro->setUnidad($this);
+        }
+
+        $this->cobro = $cobro;
 
         return $this;
     }

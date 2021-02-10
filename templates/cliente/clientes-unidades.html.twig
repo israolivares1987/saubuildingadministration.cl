@@ -96,29 +96,47 @@
                      <h3 class="card-title">Listado de Clientes-Unidades</h3>
                   </div> #}
                   <!-- /.card-header -->
+
                   <div class="card-body table-responsive table-bordered p-0">
-                     <table class="table table-hover text-nowrap">
+                     <table class="table table-hover w-100">
                         <thead>
                         <tr>
-                           <th></th>
-                           <th colspan='4'>Datos de la Unidad</th>
-                           <th colspan='3'>Datos del Propietario</th>
+                           <th style="width:20%"></th>
+                           <th style="width:40%" colspan='4'>Datos de la Unidad</th>
+                           <th style="width:40%" colspan='3'>Datos del Propietario</th>
                         </tr>
                         <tr>
-                           <th>Acciones</th>
-                           <th>Tipo</th>
-                           <th>Edificio</th>
-                           <th>Piso</th>
-                           <th>Unidad</th>
-                           <th>Dueño</th>
-                           <th>Representante</th>
-                           <th>Correo</th>
+                           <th style="width:20%">Acciones</th>
+                           <th style="width:10%">Tipo</th>
+                           <th style="width:10%">Edificio</th>
+                           <th style="width:10%">Piso</th>
+                           <th style="width:10%">Unidad</th>
+                           <th style="width:10%">Dueño</th>
+                           <th style="width:10%">Representante</th>
+                           <th style="width:20%">Correo</th>
                         </tr>
                         </thead>
                         <tbody>
                            {% for unidad in unidades %}
-                              <tr>
-                                 <td></td>
+                              <tr {% if unidad.factor != null %} data-widget="expandable-table" aria-expanded="false" {% endif %}>
+                                 <td>
+                                    <div class="btn-group elevation-2">
+                                       {% if unidad.factor != null %}
+                                          <button class="btn btn-secondary">
+                                             <i class="fas fa-caret-right fa-fw"></i>
+                                          </button>
+                                       {% endif %}
+                                       <button class="btn btn-info">
+                                          <i class="fas fas fa-edit"></i>
+                                       </button>
+                                       <button class="btn btn-success">
+                                          <i class="fas fa-plus"></i>
+                                       </button>
+                                       <button class="btn btn-danger">
+                                          <i class="fas fa-trash"></i>
+                                       </button>
+                                    </div>
+                                 </td>
                                  <td>{{ unidad.tipoUnidad }}</td>
                                  <td>{{ unidad.edificio }}</td>
                                  <td>{{ unidad.piso }}</td>
@@ -127,6 +145,88 @@
                                  <td>{{ unidad.nombreRepresentante }}</td>
                                  <td>{{ unidad.email1 }}<br>{{ unidad.email2 ? unidad.email2 }} </td>
                               </tr>
+                              {% if unidad.factor != null %}
+                                 <tr class="expandable-body" >
+                                    <td colspan="8" class="border border-primary m-0 p-0">
+                                       <h4 class="m-0 p-1">Cobros asociados a la unidad</h4>
+                                       <div class="p-0 w-100">
+                                          <table class="table w-100 m-0">
+                                             <thead>
+                                             <tr>
+                                                <th style="width:20%"></th>
+                                                <th style="width:80%" colspan='5'>Datos del Cobro</th>
+                                             </tr>
+                                             <tr>
+                                                <th style="width:20%">Acciones</th>
+                                                <th style="width:15%">Factor (%)</th>
+                                                <th style="width:15%">Mensual</th>
+                                                <th style="width:15%">Fondo Reserva</th>
+                                                <th style="width:15%">Adicional</th>
+                                                <th style="width:20%">Total</th>
+                                             </tr>
+                                             </thead>
+                                             <tbody>
+                                                <tr>
+                                                   <td>
+                                                      <div class="btn-group elevation-2">
+                                                      <button class="btn btn-info">
+                                                         <i class="fas fas fa-edit"></i>
+                                                      </button>
+                                                      <button class="btn btn-danger">
+                                                         <i class="fas fa-trash"></i>
+                                                      </button>
+                                                      </div>
+                                                   </td>
+                                                   <td>{{ unidad.factor }}</td>
+                                                   <td>{{ unidad.mensual }}</td>
+                                                   <td>{{ unidad.fondoReserva }}</td>
+                                                   <td>{{ unidad.adicional }}</td>
+                                                   <td>{{ unidad.factor + unidad.mensual + unidad.fondoReserva + unidad.adicional}}</td>
+                                                </tr>
+                                             </tbody>
+                                          </table>
+                                       </div>
+                                       {% if unidad.unidadHija_tipoUnidad != null %}
+                                          <p>Unidad Hija o unidad asociada</p>
+                                          <div class="p-0 w-100">
+                                             <table class="table w-100 m-0">
+                                                <thead>
+                                                <tr>
+                                                   <th style="width:20%"></th>
+                                                   <th style="width:80%" colspan='5'>Datos de la unidad Hija o unidad asociada</th>
+                                                </tr>
+                                                <tr>
+                                                   <th style="width:20%">Acciones</th>
+                                                   <th style="width:20%">Tipo Unidad</th>
+                                                   <th style="width:20%">Edificio</th>
+                                                   <th style="width:20%">Piso</th>
+                                                   <th style="width:20%">Unidad</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                   <tr>
+                                                      <td>
+                                                         <div class="btn-group elevation-2">
+                                                         <button class="btn btn-info">
+                                                            <i class="fas fas fa-edit"></i>
+                                                         </button>
+                                                         <button class="btn btn-danger">
+                                                            <i class="fas fa-trash"></i>
+                                                         </button>
+                                                         </div>
+                                                      </td>
+                                                      <td>{{ unidad.unidadHija_tipoUnidad }}</td>
+                                                      <td>{{ unidad.unidadHija_edificio }}</td>
+                                                      <td>{{ unidad.unidadHija_piso }}</td>
+                                                      <td>{{ unidad.unidadHija_unidad }}</td>
+                                                   </tr>
+                                                </tbody>
+                                             </table>
+                                          </div>
+                                       {% endif %}
+                                    </td>
+                                 </tr>
+                              {% endif %}
                            {% else %}
                               <tr>
                                  <td colspan="8">No hay registros para mostrar</td>
