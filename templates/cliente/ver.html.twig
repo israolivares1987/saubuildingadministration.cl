@@ -1,6 +1,6 @@
 {% extends 'layout.html.twig' %}
 
-{% block title %}{{parent()}} - Ver Detalle Unidad{% endblock %}
+{% block title %}{{parent()}} - Ver Detalle Cliente{% endblock %}
 
 {% block content %}
     <div class="content-wrapper">
@@ -9,7 +9,7 @@
 			<div class="container-fluid">
 				<div class="row mb-2">
 					<div class="col-sm-6">
-						<h1 class="m-0">Ver Detalle Unidad</h1>
+						<h1 class="m-0">Ver Detalle Cliente</h1>
 					</div>
 					<!-- /.col -->
 					<div class="col-sm-6">
@@ -18,9 +18,9 @@
 								<a href="{{ path('dashboard') }}">Dashboard</a>
 							</li>
 							<li class="breadcrumb-item">
-								<a href="{{ path('mantenedores_unidades_index') }}">Unidades</a>
+								<a href="{{ path('mantenedores_clientes_index') }}">Clientes</a>
 							</li>
-							<li class="breadcrumb-item active">Ver Unidad</li>
+							<li class="breadcrumb-item active">Ver Cliente</li>
 						</ol>
 					</div>
 					<!-- /.col -->
@@ -38,49 +38,54 @@
 					<div class="col-md-8">
                         <div class="card card-primary">
 							<div class="card-header">
-                			    <h3 class="card-title">Detalle Unidad</h3>
+                			    <h3 class="card-title">Detalle Cliente</h3>
               			    </div>
 							<table class="table">
                                 <tbody>
                                     <tr>
-                                        <th>Conjunto o Edificio</th>
-                                        <td>{{ unidad.conjunto }}</td>
-                                        <th>Piso</th>
-                                        <td>{{ unidad.piso }}</td>
+                                        <th>Rut</th>
+                                        <td>{{ cliente.rut }}</td>
+                                        <th>Nombres</th>
+                                        <td>{{ cliente.nombres }}</td>
                                     </tr>
                                     <tr>
-                                        <th>Unidad</th>
-                                        <td>{{ unidad.unidad }}</td>
-                                        <th>Estado</th>
-                                        <td>{{ unidad.estado ? 'Activo' : 'Inactivo' }}</td>
+                                        <th>Apellidos</th>
+                                        <td>{{ cliente.apellidos }}</td>
+                                        <th>Domicilio</th>
+                                        <td>{{ cliente.domicilio }}</td>
                                     </tr>
                                     <tr>
-                                        <th colspan>Tipo de Unidad</th>
-                                        <td colspan='3'>{{unidad.tipoUnidad.nombre}}</td>
+                                        <th>Telefono1</th>
+                                        <td>{{ cliente.telefono1 }}</td>
+                                        <th>Telefono2</th>
+                                        <td>{{ cliente.telefono2 }}</td>
                                     </tr>
                                     <tr>
-                                        <th colspan='4'>Datos de la Unidad</th>
+                                        <th>Celular</th>
+                                        <td>{{ cliente.celular }}</td>
+                                        <th>RazonSocial</th>
+                                        <td>{{ cliente.razonSocial }}</td>
                                     </tr>
-                                    {% if not unidad.datosUnidad %}
                                     <tr>
-                                        <th colspan='4'>No hay Datos para mostrar</th>
+                                        <th>Email1</th>
+                                        <td>{{ cliente.email1 }}</td>
+                                        <th>Email2</th>
+                                        <td>{{ cliente.email2 }}</td>
                                     </tr>
-                                    {% else %}
-                                        {% for visible in unidad.tipoUnidad.datosVisibles|split(',') %}
-                                        <tr>
-                                            <th>{{visible|trim|capitalize}}</th>
-                                            <td colspan='3'>{{attribute(unidad.datosUnidad, visible|trim)}}</td>
-                                        </tr>
-                                            
-                                        {% endfor %}
-                                    {% endif %}
+                                    <tr>
+                                        <th>Representante</th>
+                                        <td>{{ cliente.representante }}</td>
+                                        <th>Relacion</th>
+                                        <td>{{ cliente.relacion }}</td>
+                                    </tr>
+                                    
                                     <tr>
                                         <th>Acciones</th>
                                         <td colspan='3'>
-                                            <a href="{{ path('mantenedores_unidades_index') }}" class="btn btn-secondary">
+                                            <a href="{{ path('mantenedores_clientes_index') }}" class="btn btn-secondary">
                                                 <i class="fas fa-arrow-left"></i> Volver
                                             </a>
-                                            <a href="{{ path('unidades_editar', {'id': unidad.id}) }}" class="btn btn-primary">
+                                            <a href="{{ path('cliente_editar', {'id': cliente.id}) }}" class="btn btn-primary">
                                                 <i class="fas fa-edit"></i> Editar
                                             </a>
                                         </td>

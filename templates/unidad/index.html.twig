@@ -48,7 +48,7 @@
                </div>
             {% endfor %}
             <a href="{{ path('unidades_nuevo') }}" class="btn btn-app bg-success">
-               <i class="fas fa-plus"></i> Nuevo
+               <i class="fas fa-plus"></i> Agregar Unidad
             </a>
             <div class="col-12">
                <div class="card card-primary">
@@ -117,35 +117,32 @@
                      <table class="table table-hover text-nowrap">
                         <thead>
                         <tr>
-                           <th>{{ knp_pagination_sortable(unidades, 'Tipo Unidad', 't.nombre') }}</th>
-                           <th>{{ knp_pagination_sortable(unidades, 'Edificio', 'c.nombre') }}</th>
-                           <th>{{ knp_pagination_sortable(unidades, 'Piso', 'u.piso') }}</th>
-                           <th>{{ knp_pagination_sortable(unidades, 'Unidad', 'u.unidad') }}</th>
-                           <th>{{ knp_pagination_sortable(unidades, 'Estado', 'u.estado') }}</th>
-                           <th>Acciones</th>
+                           <th style="width:10%">Acciones</th>
+                           <th style="width:20%">{{ knp_pagination_sortable(unidades, 'Tipo Unidad', 't.nombre') }}</th>
+                           <th style="width:20%">{{ knp_pagination_sortable(unidades, 'Edificio', 'c.nombre') }}</th>
+                           <th style="width:10%">{{ knp_pagination_sortable(unidades, 'Piso', 'u.piso') }}</th>
+                           <th style="width:20%">{{ knp_pagination_sortable(unidades, 'Unidad', 'u.unidad') }}</th>
+                           <th style="width:20%">{{ knp_pagination_sortable(unidades, 'Estado', 'u.estado') }}</th>
                         </tr>
                         </thead>
                         <tbody>
                            {% for unidad in unidades %}
                               <tr>
+                                 <td>
+                                    <div class="btn-group elevation-2">
+                                       <a href="{{ path('unidades_ver', {'id': unidad.id}) }}" class="btn btn-info">
+                                          <i class="fas fas fa-eye"></i>
+                                       </a>
+                                       <a href="{{ path('unidades_editar', {'id': unidad.id}) }}" class="btn btn-primary">
+                                          <i class="fas fa-edit"></i>
+                                       </a>
+                                    </div>
+                                 </td>
                                  <td>{{ unidad.tipoUnidad }}</td>
                                  <td>{{ unidad.edificio }}</td>
                                  <td>{{ unidad.piso }}</td>
                                  <td>{{ unidad.unidad }}</td>
                                  <td>{{ unidad.estado ? 'Activo' : 'Inactivo' }}</td>
-                                 <td>
-                                    <a href="{{ path('unidades_ver', {'id': unidad.id}) }}" class="btn btn-app bg-secondary">
-                                       <i class="fas fa-clipboard-check"></i> Ver Detalle
-                                    </a>
-                                    <a href="{{ path('unidades_editar', {'id': unidad.id}) }}" class="btn btn-app bg-primary">
-                                       <i class="fas fa-edit"></i> Editar
-                                    </a>
-                                    <form method="post" style='display:inline' action="{{ path('unidades_delete', {'id': unidad.id}) }}" onsubmit="return confirm('¿Seguro que desea borrar la unidad seleccionada?');">
-                                       <input type="hidden" name="_method" value="DELETE">
-                                       <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ unidad.id) }}">
-                                       <button class="btn btn-app bg-danger"><i class="fas fa-trash"></i>Borrar</button>
-                                    </form>
-                                 </td>
                               </tr>
                            {% else %}
                               <tr>

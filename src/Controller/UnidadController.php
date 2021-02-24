@@ -83,7 +83,7 @@ class UnidadController extends AbstractController
         $pagination = $paginator->paginate(
             $query, /* query NOT result */
             $request->query->getInt('page', 1), /*page number*/
-            10 /*limit per page*/
+            25 /*limit per page*/
         );
         $pagination->setCustomParameters([
             'align' => 'center', # center|right (for template: twitter_bootstrap_v4_pagination)

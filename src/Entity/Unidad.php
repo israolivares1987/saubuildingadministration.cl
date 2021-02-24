@@ -75,14 +75,21 @@ class Unidad
     private $conjunto;
 
     /**
-     * @ORM\OneToOne(targetEntity=Cobro::class, mappedBy="unidad", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity=VariablesGastoComun::class, mappedBy="unidad", cascade={"persist", "remove"})
      */
-    private $cobro;
+    private $variablesGastoComun;
+
+    /**
+     * @ORM\OneToMany(targetEntity=CuentaGastoComun::class, mappedBy="unidad")
+     */
+    private $cuentasGastoComun;
+
 
     public function __construct()
     {
         $this->estado = true;
-        $this->corredoras = new ArrayCollection();        
+        $this->corredoras = new ArrayCollection();
+        $this->cuentasGastoComun = new ArrayCollection();        
     }
 
     public function getId(): ?int
@@ -241,25 +248,56 @@ class Unidad
         return $this;
     }
 
-    public function getCobro(): ?Cobro
+    public function getVariablesGastoComun(): ?VariablesGastoComun
     {
-        return $this->cobro;
+        return $this->variablesGastoComun;
     }
 
-    public function setCobro(?Cobro $cobro): self
+    public function setVariablesGastoComun(?VariablesGastoComun $variablesGastoComun): self
     {
         // unset the owning side of the relation if necessary
-        if ($cobro === null && $this->cobro !== null) {
-            $this->cobro->setUnidad(null);
+        if ($variablesGastoComun === null && $this->variablesGastoComun !== null) {
+            $this->variablesGastoComun->setUnidad(null);
         }
 
         // set the owning side of the relation if necessary
-        if ($cobro !== null && $cobro->getUnidad() !== $this) {
-            $cobro->setUnidad($this);
+        if ($variablesGastoComun !== null && $variablesGastoComun->getUnidad() !== $this) {
+            $variablesGastoComun->setUnidad($this);
         }
 
-        $this->cobro = $cobro;
+        $this->variablesGastoComun = $variablesGastoComun;
 
         return $this;
     }
+
+    /**
+     * @return Collection|CuentaGastoComun[]
+     */
+    public function getCuentasGastoComun(): Collection
+    {
+        return $this->cuentasGastoComun;
+    }
+
+    public function addCuentasGastoComun(CuentaGastoComun $cuentasGastoComun): self
+    {
+        if (!$this->cuentasGastoComun->contains($cuentasGastoComun)) {
+            $this->cuentasGastoComun[] = $cuentasGastoComun;
+            $cuentasGastoComun->setUnidad($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCuentasGastoComun(CuentaGastoComun $cuentasGastoComun): self
+    {
+        if ($this->cuentasGastoComun->removeElement($cuentasGastoComun)) {
+            // set the owning side to null (unless already changed)
+            if ($cuentasGastoComun->getUnidad() === $this) {
+                $cuentasGastoComun->setUnidad(null);
+            }
+        }
+
+        return $this;
+    }
+
 }

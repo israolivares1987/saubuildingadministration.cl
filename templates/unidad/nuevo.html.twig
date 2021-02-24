@@ -9,7 +9,7 @@
 			<div class="container-fluid">
 				<div class="row mb-2">
 					<div class="col-sm-6">
-						<h1 class="m-0">Crear Unidad</h1>
+						<h1 class="m-0">Agregar Unidad</h1>
 					</div>
 					<!-- /.col -->
 					<div class="col-sm-6">
@@ -20,7 +20,7 @@
 							<li class="breadcrumb-item">
 								<a href="{{ path('mantenedores_unidades_index') }}">Unidades</a>
 							</li>
-							<li class="breadcrumb-item active">Crear Unidad</li>
+							<li class="breadcrumb-item active">Agregar Unidad</li>
 						</ol>
 					</div>
 					<!-- /.col -->
@@ -39,16 +39,17 @@
 					<div class="col-md-8">
 						<div class="card card-primary">
 							<div class="card-header">
-                			<h3 class="card-title">Crear Unidad</h3>
+                			<h3 class="card-title">Agregar Unidad</h3>
               			</div>
 							{{ form_start(form) }}
-							<div class="card-body">	
+							<div class="card-body">
 								<div class="row">
 									<div class='col-md-6'>
 										{{ form_row(form.conjunto) }}
 										{{ form_row(form.piso) }}
 										{{ form_row(form.unidad) }}
 										{{ form_row(form.tipoUnidad) }}
+										{{ form_row(form.estado) }}
 									</div>
 									<div class='col-md-6'>
 										{{ form_row(form.datosUnidad.metros2) }}
@@ -57,10 +58,13 @@
 										{{ form_row(form.datosUnidad.direccion) }}
 										{{ form_row(form.datosUnidad.detalle) }}
 									</div>
-								</div>
+								</div>		
 							</div>
 							<div class="card-footer">
-								<button class="btn btn-primary">{{ button_label|default('Guardar') }}</button>
+								<button class="btn btn-primary"><i class="fas fa-sync"></i> {{ button_label|default('Guardar y Actualizar') }}</button>
+								<a href="{{ path('mantenedores_unidades_index') }}" class="btn btn-secondary">
+									<i class="fas fa-arrow-left"></i> Volver
+								</a>
 							</div>
 							{{ form_end(form) }}
 						</div>
@@ -73,5 +77,4 @@
 		</div>
 		<!-- /.content -->
 	</div>
-
 {% endblock %}

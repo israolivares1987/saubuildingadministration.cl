@@ -2,25 +2,25 @@
 
 namespace App\Repository;
 
-use App\Entity\Cobro;
+use App\Entity\CuentaGastoComun;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @method Cobro|null find($id, $lockMode = null, $lockVersion = null)
- * @method Cobro|null findOneBy(array $criteria, array $orderBy = null)
- * @method Cobro[]    findAll()
- * @method Cobro[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method CuentaGastoComun|null find($id, $lockMode = null, $lockVersion = null)
+ * @method CuentaGastoComun|null findOneBy(array $criteria, array $orderBy = null)
+ * @method CuentaGastoComun[]    findAll()
+ * @method CuentaGastoComun[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class CobroRepository extends ServiceEntityRepository
+class CuentaGastoComunRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Cobro::class);
+        parent::__construct($registry, CuentaGastoComun::class);
     }
 
     // /**
-    //  * @return Cobro[] Returns an array of Cobro objects
+    //  * @return CuentaGastoComun[] Returns an array of CuentaGastoComun objects
     //  */
     /*
     public function findByExampleField($value)
@@ -37,7 +37,7 @@ class CobroRepository extends ServiceEntityRepository
     */
 
     /*
-    public function findOneBySomeField($value): ?Cobro
+    public function findOneBySomeField($value): ?CuentaGastoComun
     {
         return $this->createQueryBuilder('c')
             ->andWhere('c.exampleField = :val')

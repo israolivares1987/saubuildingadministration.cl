@@ -1,6 +1,6 @@
 {% extends 'layout.html.twig' %}
 
-{% block title %}{{parent()}} - Unidades{% endblock %}
+{% block title %}{{parent()}} - Clientes{% endblock %}
 
 {% block content %}
 	<div class="content-wrapper">
@@ -9,7 +9,7 @@
 			<div class="container-fluid">
 				<div class="row mb-2">
 					<div class="col-sm-6">
-						<h1 class="m-0">Editar Unidad</h1>
+						<h1 class="m-0">Agregar Cliente</h1>
 					</div>
 					<!-- /.col -->
 					<div class="col-sm-6">
@@ -18,9 +18,9 @@
 								<a href="{{ path('dashboard') }}">Dashboard</a>
 							</li>
 							<li class="breadcrumb-item">
-								<a href="{{ path('mantenedores_unidades_index') }}">Unidades</a>
+								<a href="{{ path('mantenedores_clientes_index') }}">Clientes</a>
 							</li>
-							<li class="breadcrumb-item active">Editar Unidad</li>
+							<li class="breadcrumb-item active">Agregar Cliente</li>
 						</ol>
 					</div>
 					<!-- /.col -->
@@ -39,30 +39,32 @@
 					<div class="col-md-8">
 						<div class="card card-primary">
 							<div class="card-header">
-                			<h3 class="card-title">Editar Unidad</h3>
+                			<h3 class="card-title">Agregar Cliente</h3>
               			</div>
 							{{ form_start(form) }}
 							<div class="card-body">
 								<div class="row">
 									<div class='col-md-6'>
-										{{ form_row(form.conjunto) }}
-										{{ form_row(form.piso) }}
-										{{ form_row(form.unidad) }}
-										{{ form_row(form.tipoUnidad) }}
-										{{ form_row(form.estado) }}
+										{{ form_row(form.rut) }}
+										{{ form_row(form.nombres) }}
+										{{ form_row(form.apellidos) }}
+										{{ form_row(form.domicilio) }}
+										{{ form_row(form.telefono1) }}
+										{{ form_row(form.telefono2) }}
 									</div>
 									<div class='col-md-6'>
-										{{ form_row(form.datosUnidad.metros2) }}
-										{{ form_row(form.datosUnidad.dormitorios) }}
-										{{ form_row(form.datosUnidad.banios) }}
-										{{ form_row(form.datosUnidad.direccion) }}
-										{{ form_row(form.datosUnidad.detalle) }}
+										{{ form_row(form.celular) }}
+										{{ form_row(form.email1) }}
+										{{ form_row(form.email2) }}
+										{{ form_row(form.razonSocial) }}
+										{{ form_row(form.representante) }}
+										{{ form_row(form.relacion) }}
 									</div>
 								</div>		
 							</div>
 							<div class="card-footer">
 								<button class="btn btn-primary"><i class="fas fa-sync"></i> {{ button_label|default('Guardar y Actualizar') }}</button>
-								<a href="{{ path('mantenedores_unidades_index') }}" class="btn btn-secondary">
+								<a href="{{ path('mantenedores_clientes_index') }}" class="btn btn-secondary">
 									<i class="fas fa-arrow-left"></i> Volver
 								</a>
 							</div>

@@ -2,13 +2,13 @@
 
 namespace App\Entity;
 
-use App\Repository\CobroRepository;
+use App\Repository\VariablesGastoComunRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass=CobroRepository::class)
+ * @ORM\Entity(repositoryClass=VariablesGastoComunRepository::class)
  */
-class Cobro
+class VariablesGastoComun
 {
     /**
      * @ORM\Id
@@ -25,25 +25,25 @@ class Cobro
     /**
      * @ORM\Column(type="float", nullable=true)
      */
-    private $mensual;
-
-    /**
-     * @ORM\Column(type="float", nullable=true)
-     */
-    private $fondoReserva;
-
-    /**
-     * @ORM\Column(type="float", nullable=true)
-     */
     private $adicional;
 
     /**
-     * @ORM\OneToOne(targetEntity=Unidad::class, inversedBy="cobro", cascade={"persist", "remove"})
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $deudaHistorica;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $fechaDeudaHistorica;
+
+    /**
+     * @ORM\OneToOne(targetEntity=Unidad::class, inversedBy="variablesGastoComun", cascade={"persist", "remove"})
      */
     private $unidad;
 
     /**
-     * @ORM\OneToOne(targetEntity=Unidad::class, inversedBy="cobro", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity=Unidad::class, inversedBy="variablesGastoComun", cascade={"persist", "remove"})
      */
     private $unidadHija;
 
@@ -64,30 +64,6 @@ class Cobro
         return $this;
     }
 
-    public function getMensual(): ?float
-    {
-        return $this->mensual;
-    }
-
-    public function setMensual(?float $mensual): self
-    {
-        $this->mensual = $mensual;
-
-        return $this;
-    }
-
-    public function getFondoReserva(): ?float
-    {
-        return $this->fondoReserva;
-    }
-
-    public function setFondoReserva(?float $fondoReserva): self
-    {
-        $this->fondoReserva = $fondoReserva;
-
-        return $this;
-    }
-
     public function getAdicional(): ?float
     {
         return $this->adicional;
@@ -96,6 +72,30 @@ class Cobro
     public function setAdicional(?float $adicional): self
     {
         $this->adicional = $adicional;
+
+        return $this;
+    }
+
+    public function getDeudaHistorica(): ?float
+    {
+        return $this->deudaHistorica;
+    }
+
+    public function setDeudaHistorica(?float $deudaHistorica): self
+    {
+        $this->deudaHistorica = $deudaHistorica;
+
+        return $this;
+    }
+
+    public function getFechaDeudaHistorica(): ?\DateTimeInterface
+    {
+        return $this->fechaDeudaHistorica;
+    }
+
+    public function setFechaDeudaHistorica(?\DateTimeInterface $fechaDeudaHistorica): self
+    {
+        $this->fechaDeudaHistorica = $fechaDeudaHistorica;
 
         return $this;
     }

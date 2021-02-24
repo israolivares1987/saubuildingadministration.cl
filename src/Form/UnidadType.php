@@ -21,11 +21,16 @@ class UnidadType extends AbstractType
                 'class' => Conjunto::class,
                 'choice_label' => 'nombre',
                 'placeholder' => 'Seleccione...',
-                'label' => 'Conjunto o Edificio'
+                'label' => 'Conjunto o Edificio',
+                'help' => 'Seleccione una opción'
             ])
             ->add('piso', IntegerType::class, ['help' => 'Por favor Introduzca valor'])
             ->add('unidad', TextType::class, ['help' => 'Por favor Introduzca valor'])
-            ->add('tipoUnidad')
+            ->add('tipoUnidad', null, ['help' => 'Seleccione una opción'])
+            ->add('estado', null, [
+                'label' => 'Activo / Inactivo',
+                'help' => 'Seleccionado = Activo'
+            ])
             ->add('datosUnidad', DatosUnidadType::class)
         ;
     }

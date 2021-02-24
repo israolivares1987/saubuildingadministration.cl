@@ -15,9 +15,9 @@ class DatosUnidadType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('metros2', IntegerType::class, ['help' => 'Por favor Introduzca valor numerico', 'label' => 'Metros Cuadrados'])
-            ->add('dormitorios', IntegerType::class, ['help' => 'Por favor Introduzca valor numerico', 'label' => 'Dormitorios'])
-            ->add('banios', IntegerType::class, ['help' => 'Por favor Introduzca valor numerico', 'label' => 'Baños'])
+            ->add('metros2', IntegerType::class, ['help' => 'Por favor Introduzca valor numérico', 'label' => 'Metros Cuadrados'])
+            ->add('dormitorios', IntegerType::class, ['help' => 'Por favor Introduzca valor numérico', 'label' => 'Dormitorios'])
+            ->add('banios', IntegerType::class, ['help' => 'Por favor Introduzca valor numérico', 'label' => 'Baños'])
             ->add('direccion', TextType::class)
             ->add('detalle', TextareaType::class)
         ;

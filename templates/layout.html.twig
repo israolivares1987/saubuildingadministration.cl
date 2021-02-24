@@ -176,7 +176,7 @@
                 <a href="{{ path('dashboard') }}" {% if route_name == "dashboard" %} class="nav-link active" {% else %} class="nav-link" {% endif %}>
                 <i class="nav-icon fas fa-tachometer-alt"></i>
                 <p>
-                    Dashboard
+                    Tablero
                 </p>
                 </a>
             </li>
@@ -204,11 +204,13 @@
                 </ul>
             </li> #}
 
+            <li class="nav-header">MÓDULOS PRINCIPALES</li>
+
             <li {% if route_name matches "{^mantenedores}" %} class="nav-item menu-open" {% else %} class="nav-item" {% endif %}>
                 <a href="#" {% if route_name matches "{^mantenedores}" %} class="nav-link active" {% else %} class="nav-link" {% endif %}>
-                <i class="nav-icon fas fa-th"></i>
+                <i class="nav-icon fas fa-folder"></i>
                 <p>
-                    Mantenedores
+                    Mantenedor de Datos
                     <i class="right fas fa-angle-left"></i>
                 </p>
                 </a>
@@ -221,37 +223,86 @@
                     </li>
                     <li class="nav-item">
                         <a href="{{ path('mantenedores_clientes_index') }}" {% if route_name == "mantenedores_clientes_index" %} class="nav-link active" {% else %} class="nav-link" {% endif %}>
-                        <i class="nav-icon fas fa-th"></i>
+                        <i class="nav-icon fas fa-user-tie"></i>
                         <p>Clientes</p>
                         </a>
                     </li>
                 </ul>
             </li>
 
-            <li class="nav-item">
-                <a href="{{ path('clientes_unidades') }}" {% if route_name == "clientes_unidades" %} class="nav-link active" {% else %} class="nav-link" {% endif %}>
-                <i class="far fa-circle nav-icon"></i>
-                <p>Clientes-Unidades</p>
-                </a>
-            </li>
-
-            <li class="nav-item">
-                <a href="#" class="nav-link">
-                <i class="nav-icon far fa-address-book"></i>
+            <li {% if route_name matches "{^gastos_comunes}" %} class="nav-item menu-open" {% else %} class="nav-item" {% endif %}>
+                <a href="#" {% if route_name matches "{^gastos_comunes}" %} class="nav-link active" {% else %} class="nav-link" {% endif %}>
+                <i class="nav-icon fas fa-piggy-bank"></i>
                 <p>
-                    Empleados
+                    Recaudacion
                     <i class="right fas fa-angle-left"></i>
                 </p>
                 </a>
                 <ul class="nav nav-treeview">
                     <li class="nav-item">
-                        <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-address-card"></i>
-                        <p>Liquidaciones</p>
+                        <a href="{{ path('gastos_comunes_administracion') }}" {% if route_name == "gastos_comunes_administracion" %} class="nav-link active" {% else %} class="nav-link" {% endif %}>
+                        <i class="nav-icon fas fa-file-invoice-dollar"></i>
+                        <p>Gastos Comunes</p>
                         </a>
                     </li>
                 </ul>
             </li>
+
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                <i class="nav-icon fas fa-book"></i>
+                <p>
+                    Remuneraciones
+                    <i class="right fas fa-angle-left"></i>
+                </p>
+                </a>
+                <ul class="nav nav-treeview">
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                    <i class="fas fa-people-carry nav-icon"></i>
+                    <p>Empleados</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                    <i class="fas fa-file-invoice nav-icon"></i>
+                    <p>Liquidaciones</p>
+                    </a>
+                </li>
+                </ul>
+            </li>
+
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                <i class="nav-icon fas fa-tools"></i>
+                <p>
+                    Mantenimiento
+                    <i class="right fas fa-angle-left"></i>
+                </p>
+                </a>
+                <ul class="nav nav-treeview">
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Equipos</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Infraestructura</p>
+                    </a>
+                </li>
+                </ul>
+            </li>
+
+            {# <li class="nav-item">
+                <a href="{{ path('clientes_unidades') }}" {% if route_name == "clientes_unidades" %} class="nav-link active" {% else %} class="nav-link" {% endif %}>
+                <i class="far fa-circle nav-icon"></i>
+                <p>Clientes-Unidades</p>
+                </a>
+            </li> #}
+
             </ul>
         </nav>
         <!-- /.sidebar-menu -->
@@ -279,10 +330,10 @@
     <footer class="main-footer">
         <!-- To the right -->
         <div class="float-right d-none d-sm-inline">
-        Con cariño
+        ---
         </div>
         <!-- Default to the left -->
-        <strong>Copyright &copy; 2020 <a href="https://composer.cl">Composer.cl</a></strong>
+        <strong>Copyright &copy; 2021 <a href="https://composer.cl">Composer.cl</a></strong>
     </footer>
     {% endblock %}
 {% endblock %}

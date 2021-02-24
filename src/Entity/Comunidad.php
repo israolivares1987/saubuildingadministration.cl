@@ -44,6 +44,11 @@ class Comunidad
      */
     private $conjuntos;
 
+    /**
+     * @ORM\OneToOne(targetEntity=ParametrosFinacierosComunidad::class, mappedBy="comunidad", cascade={"persist", "remove"})
+     */
+    private $parametrosFinacierosComunidad;
+
     public function __construct()
     {
         $this->usuarioRoles = new ArrayCollection();
@@ -147,6 +152,28 @@ class Comunidad
                 $conjunto->setComunidad(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getParametrosFinacierosComunidad(): ?ParametrosFinacierosComunidad
+    {
+        return $this->parametrosFinacierosComunidad;
+    }
+
+    public function setParametrosFinacierosComunidad(?ParametrosFinacierosComunidad $parametrosFinacierosComunidad): self
+    {
+        // unset the owning side of the relation if necessary
+        if ($parametrosFinacierosComunidad === null && $this->parametrosFinacierosComunidad !== null) {
+            $this->parametrosFinacierosComunidad->setComunidad(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($parametrosFinacierosComunidad !== null && $parametrosFinacierosComunidad->getComunidad() !== $this) {
+            $parametrosFinacierosComunidad->setComunidad($this);
+        }
+
+        $this->parametrosFinacierosComunidad = $parametrosFinacierosComunidad;
 
         return $this;
     }

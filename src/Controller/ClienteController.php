@@ -59,7 +59,7 @@ class ClienteController extends AbstractController
         $pagination = $paginator->paginate(
             $query, /* query NOT result */
             $request->query->getInt('page', 1), /*page number*/
-            10 /*limit per page*/
+            25 /*limit per page*/
         );
         $pagination->setCustomParameters([
             'align' => 'center', # center|right (for template: twitter_bootstrap_v4_pagination)
@@ -87,10 +87,12 @@ class ClienteController extends AbstractController
             $entityManager->persist($cliente);
             $entityManager->flush();
 
+            $this->addFlash('cliente_success', 'Se creó el cliente');
+
             return $this->redirectToRoute('mantenedores_clientes_index');
         }
 
-        return $this->render('cliente/new.html.twig', [
+        return $this->render('cliente/nuevo.html.twig', [
             'cliente' => $cliente,
             'form' => $form->createView(),
         ]);
@@ -153,7 +155,7 @@ class ClienteController extends AbstractController
      */
     public function show(Cliente $cliente): Response
     {
-        return $this->render('cliente/show.html.twig', [
+        return $this->render('cliente/ver.html.twig', [
             'cliente' => $cliente,
         ]);
     }
@@ -170,10 +172,12 @@ class ClienteController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
+            $this->addFlash('unidad_success', 'Se actualizó el cliente');
+
             return $this->redirectToRoute('mantenedores_clientes_index');
         }
 
-        return $this->render('cliente/edit.html.twig', [
+        return $this->render('cliente/editar.html.twig', [
             'cliente' => $cliente,
             'form' => $form->createView(),
         ]);
