@@ -47,33 +47,43 @@ class UnidadRepository extends ServiceEntityRepository
         return $qb->getQuery();
     }
 
-    public function buscarUnidadesClientes(Conjunto $conjunto = null, TipoUnidad $tipoUnidad = null, $unidad = null, $persona = null) {
+    public function buscarGastosComunes(Conjunto $conjunto = null, TipoUnidad $tipoUnidad = null, $unidad = null, $persona = null, $ano = null, $mes = null) {
+
+        $ano = $ano ?: 2021;
+        $mes = $mes ?: 1;
+        //p = propietario
+        //t = tipo de unidad
+        //u = unidad
+        //cgc = cuenta gasto comun
+        //vgc = variables gasto comun
         $qb = $this->createQueryBuilder('u')
         ->select('
-            t.nombre as tipoUnidad,
-            c.nombre as edificio, 
-            u.piso, 
-            u.unidad, 
+            u.id as idUnidad,
             p.nombres as nombrePropietario, 
             p.representante as nombreRepresentante, 
-            p.email1, 
-            p.email2,
-            co.factor,
-            co.mensual,
-            co.fondoReserva,
-            co.adicional,
-            coht.nombre as unidadHija_tipoUnidad, 
-            cohc.nombre as unidadHija_edificio,
-            coh.piso as unidadHija_piso,
-            coh.unidad as unidadHija_unidad')
-        ->leftJoin('u.tipoUnidad', 't') //join tipo unidad
-        ->leftJoin('u.conjunto', 'c') //join conjunto
+            t.nombre as tipoUnidad,
+            u.unidad, 
+            cgc.factor as factor_cgc,
+            cgc.mensualBase as mensualBase_cgc,
+            cgc.fondoReserva as fondoReserva_cgc,
+            cgc.adicional as adicional_cgc,
+            cgc.deuda as deuda_cgc,
+            cgc.interes as interes_cgc,
+            cgc.montoCobro as montoCobro_cgc,
+            cgc.montoPago as montoPago_cgc,
+            cgc.saldo as saldo_cgc,
+            vgc.factor as factor_vgc,
+            vgc.adicional as adicional_vgc,
+            vgc.deudaHistorica as deuda_vgc')
         ->leftJoin('u.propietario', 'pro') //join con propietario
         ->leftJoin('pro.cliente', 'p') //join con cliente segun id propietario
-        ->leftJoin('u.cobro', 'co') //join con cobro de unidad
-        ->leftJoin('co.unidadHija', 'coh') //join con unidad hija de cobro de unidad
-        ->leftJoin('coh.tipoUnidad', 'coht') //join con tipo de unidad hija de cobro de unidad
-        ->leftJoin('coh.conjunto', 'cohc'); //Join con conjunto de unidad hija de cobro de unidad
+        ->leftJoin('u.tipoUnidad', 't') //join tipo unidad
+        ->leftJoin('u.conjunto', 'c') //join conjunto
+        ->leftJoin('u.cuentasGastoComun', 'cgc') //join con cuenta de gasto comun de unidad
+        ->leftJoin('u.variablesGastoComun', 'vgc') //join con variables de gasto comun de unidad
+        ->andWhere('cgc.anoGasto = '.$ano.' OR cgc.anoGasto IS NULL')
+        ->andWhere('cgc.mesGasto = '.$mes.' OR cgc.mesGasto IS NULL')
+        ->andWhere('vgc.factor IS NOT NULL');
         if($tipoUnidad != null){
             $qb->andWhere('u.tipoUnidad = '.$tipoUnidad->getId());
         }

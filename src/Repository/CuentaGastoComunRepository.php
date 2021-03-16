@@ -2,7 +2,9 @@
 
 namespace App\Repository;
 
+use App\Entity\Conjunto;
 use App\Entity\CuentaGastoComun;
+use App\Entity\TipoUnidad;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -18,6 +20,8 @@ class CuentaGastoComunRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, CuentaGastoComun::class);
     }
+
+    
 
     // /**
     //  * @return CuentaGastoComun[] Returns an array of CuentaGastoComun objects

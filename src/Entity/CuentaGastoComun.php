@@ -82,6 +82,11 @@ class CuentaGastoComun
      */
     private $unidad;
 
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $saldo;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -239,6 +244,18 @@ class CuentaGastoComun
     public function setUnidad(?Unidad $unidad): self
     {
         $this->unidad = $unidad;
+
+        return $this;
+    }
+
+    public function getSaldo(): ?float
+    {
+        return $this->saldo;
+    }
+
+    public function setSaldo(?float $saldo): self
+    {
+        $this->saldo = $saldo;
 
         return $this;
     }

@@ -1,20 +1,592 @@
-{% extends 'base.html.twig' %}
+{% extends 'layout.html.twig' %}
 
-{% block title %}Hello GastosComunesController!{% endblock %}
+{% block title %}{{parent()}} - Administración Gastos Comunes{% endblock %}
 
-{% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+{% block content %}
+<div class="content-wrapper">
+   <!-- Content Header (Page header) -->
+   <div class="content-header">
+      <div class="container-fluid">
+         <div class="row mb-2">
+            <div class="col-sm-6">
+               <h1 class="m-0"> Administración Gastos Comunes</h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+               <ol class="breadcrumb float-sm-right">
+                  <li class="breadcrumb-item"><a href="{{ path('dashboard') }}">Dashboard</a></li>
+                  <li class="breadcrumb-item active">Administración Gastos Comunes</li>
+               </ol>
+            </div><!-- /.col -->
+         </div><!-- /.row -->
+      </div><!-- /.container-fluid -->
+   </div>
+   <!-- /.content-header -->
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+   <!-- Main content -->
+   <div class="content">
+      <div class="container-fluid">
+         <div class="row">
+            {% for message in app.flashes('gastos_comunes_success') %}
+               <div class="col-12">
+                  <div class="card card-success">
+                  <div class="card-header">
+                     <h3 class="card-title">¡Exitoso!</h3>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'G:/xampp/htdocs/sau/src/Controller/GastosComunesController.php'|file_link(0) }}">src/Controller/GastosComunesController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'G:/xampp/htdocs/sau/templates/gastos_comunes/index.html.twig'|file_link(0) }}">templates/gastos_comunes/index.html.twig</a></code></li>
-    </ul>
+                     <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-times"></i>
+                        </button>
+                     </div>
+                     <!-- /.card-tools -->
+                  </div>
+                  <!-- /.card-header -->
+                  <div class="card-body">
+                     {{message}}
+                  </div>
+                  <!-- /.card-body -->
+                  </div>
+                  <!-- /.card -->
+               </div>
+            {% endfor %}
+            {# <a href="{{ path('cliente_nuevo') }}" class="btn btn-app bg-success">
+               <i class="fas fa-plus"></i> Nuevo
+            </a> #}
+            <div class="col-12">
+               <div class="card card-primary">
+                  <div class="card-header">
+                     <h3 class="card-title">Criterios de Búsqueda</h3>
+                  </div>
+                  {{form_start(formFiltro)}}
+                     <div class="card-body">
+                        <div class="row">
+                           <div class="col-3">
+                              <div class="form-group">
+                                 {{ form_row(formFiltro.conjunto) }}
+                              </div>
+                           </div>
+                           <div class="col-2">
+                              <div class="form-group">
+                                 {{ form_row(formFiltro.tipoUnidad) }}
+                              </div>
+                           </div>
+                           <div class="col-2">
+                              <div class="form-group">
+                                 {{ form_row(formFiltro.unidad) }}
+                              </div>
+                           </div>
+                           <div class="col-3">
+                              <div class="form-group">
+                                 {{ form_row(formFiltro.persona) }}
+                              </div>
+                           </div>
+                           <div class="col-2">
+                              <div class="form-group">
+                                 <label>&nbsp;</label>
+                                 {{ form_widget(formFiltro.filtrar) }}
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  <!-- /.card-body -->
+               </div>
+            </div>
+            <div class="col-12">
+               <div class="card card-primary card-tabs">
+                  <div class="card-header p-0 pt-1">
+                     <ul class="nav nav-tabs" id="tabss" role="tablist">
+                        <li class="px-5">
+                              {{ form_widget(formFiltro.anio) }}
+                        </li>
+                        {{ form_end(formFiltro) }}
+                        <li class="nav-item">
+                        <a class="nav-link active" id="tab-1" data-toggle="pill" href="#tab-1-cont" role="tab" aria-controls="tab-1-cont" aria-selected="true">Enero</a>
+                        </li>
+                        <li class="nav-item">
+                        <a class="nav-link" id="tab-2" data-toggle="pill" href="#tab-2-cont" role="tab" aria-controls="tab-2-cont" aria-selected="false">Febrero</a>
+                        </li>
+                     </ul>
+                  </div>
+                  <div class="card-body table-responsive table-bordered p-0" style="height: 80vh;">
+                     <table class="table table-head-fixed table-hover w-100 ">
+                        <thead>
+                        <tr>
+                           <th style="width:30%" colspan='3'>Datos de la Unidad</th>
+                           <th style="width:30%" colspan='4'>Gastos Comunes</th>
+                           <th style="width:25%" colspan='3'>Cobro</th>
+                           <th style="width:15%" colspan='2'>Pago</th>
+                        </tr>
+                        <tr>
+                           <th style="width:15%">Responsable</th>
+                           <th style="width:10%">Tipo</th>
+                           <th style="width:5%">Unidad</th>
+
+                           <th style="width:5%">Factor</th>
+                           <th style="width:10%">Mensual Base</th>
+                           <th style="width:10%">Fondo R.</th>
+                           <th style="width:5%">Adicional</th>
+
+                           <th style="width:10%">Deuda</th>
+                           <th style="width:5%">Interes</th>
+                           <th style="width:10%">Total a Pagar</th>
+                           
+                           <th style="width:7%">Monto Pago</th>
+                           <th style="width:8%">Saldo</th>
+                        </tr>
+                        </thead>
+                        {# <pre>
+                           {{ dump(gastosComunes[0]) }}
+                        </pre> #}
+                        <tbody>
+                           {% for gastoComun in gastosComunes %}
+                              {% set hayCobro = false %}
+                              {% if gastoComun.montoCobro_cgc != null %}
+                                 {% set hayCobro = true %}
+                              {% endif %}
+                              {% set hayPago = false %}
+                              {% if gastoComun.montoPago_cgc != null %}
+                                 {% set hayPago = true %}
+                              {% endif %}
+                              <tr {% if hayCobro and not hayPago %} class='bg-warning-soft' {% endif %} {% if hayPago %} class='bg-success-soft' {% endif %}>
+                                 {# <td>
+                                    <div class="btn-group elevation-2">
+                                       <button class="btn btn-info">
+                                          <i class="fas fas fa-edit"></i>
+                                       </button>
+                                       <button class="btn btn-success">
+                                          <i class="fas fa-plus"></i>
+                                       </button>
+                                       <button class="btn btn-danger">
+                                          <i class="fas fa-trash"></i>
+                                       </button>
+                                    </div>
+                                 </td> #}
+                                 <td>{{ gastoComun.nombrePropietario }} <br> {{ gastoComun.nombreRepresentante }}</td>
+                                 <td>{{ gastoComun.tipoUnidad }}</td>
+                                 <td>{{ gastoComun.unidad }}</td>
+                                 {# factor #}
+                                 <td>
+                                    {% if hayCobro %} 
+                                       {{ gastoComun.factor_cgc | number_format(3,',','.') }}
+                                    {% else %}
+                                       {{ gastoComun.factor_vgc | number_format(3,',','.') }}
+                                    {% endif %} 
+                                 </td>
+                                 {# mensual base #}
+                                 <td class='text-right'>
+                                    {% if hayCobro %} 
+                                       ${{ gastoComun.mensualBase_cgc | number_format(0,',','.') }}
+                                    {% else %}
+                                       {# se calcula factor_vgc * costo_anual / 100 #}
+                                       {% set mensualBase_vgc = (gastoComun.factor_vgc * paramFin.costoAnual / 100) %}
+                                       ${{ mensualBase_vgc | number_format(0,',','.') }}
+                                    {% endif %} 
+                                 </td>
+                                 {# fondo reserva #}
+                                 <td class='text-right'>
+                                    {% if hayCobro %} 
+                                       ${{ gastoComun.fondoReserva_cgc | number_format(0,',','.') }}
+                                    {% else %}
+                                       {# se calcula mensualBase_vgc * porcFondoReserva / 100 #}
+                                       {% set fondoReserva_vgc = (mensualBase_vgc * paramFin.porcFondoReserva / 100) %}
+                                       ${{ fondoReserva_vgc | number_format(0,',','.') }}
+                                    {% endif %} 
+                                 </td>
+                                 {# adicional #}
+                                 <td class='text-right'>
+                                    {% if hayCobro %} 
+                                       ${{ gastoComun.adicional_cgc | number_format(0,',','.') }}
+                                    {% else %}
+                                       ${{ gastoComun.adicional_vgc | number_format(0,',','.') }}
+                                    {% endif %} 
+                                 </td>
+                                 {# deuda #}
+                                 <td class='text-right'>
+                                    {% if hayCobro %} 
+                                       ${{ gastoComun.deuda_cgc | number_format(2,',','.') }}
+                                    {% else %}
+                                       ${{ gastoComun.deuda_vgc | number_format(2,',','.') }}
+                                    {% endif %} 
+                                 </td>
+                                 {# interes #}
+                                 <td class='text-right'>
+                                    {% if hayCobro %} 
+                                       ${{ gastoComun.interes_cgc | number_format(2,',','.') }}
+                                    {% else %}
+                                       {# se calcula si deuda > gasto * 2 entonces deuda * porcInteres / 100 #}
+                                       {% set montoGasto_vgc = mensualBase_vgc + fondoReserva_vgc + gastoComun.adicional_vgc %}
+                                       {% if gastoComun.deuda_vgc > (montoGasto_vgc * 2) %}
+                                          {% set interes_vgc = (gastoComun.deuda_vgc * paramFin.porcInteres / 100) %}
+                                       {% else %}
+                                          {% set interes_vgc = 0 %}
+                                       {% endif %}
+                                       ${{ interes_vgc | number_format(2,',','.') }}
+                                    {% endif %} 
+                                 </td>
+                                 {# Monto cobro #}
+                                 <td class='text-right'>
+                                    {% if hayCobro %} 
+                                       <b>${{ gastoComun.montoCobro_cgc | number_format(0,',','.') }}</b>
+                                    {% else %}
+                                       <div class="info-box generar-cobro" id="generar-cobro-{{gastoComun.idUnidad}}">
+                                          <span class="info-box-icon bg-warning"><i class="fas fa-file-invoice-dollar"></i></span>
+                                          <div class="info-box-content">
+                                             <span class="info-box-text">Generar Cobro</span>
+                                             <span class="info-box-number">
+                                                   {# se calcula sumando gasto comun total + deuda + interes #}
+                                                   {% set montoCobro_vgc = (montoGasto_vgc + gastoComun.deuda_vgc + interes_vgc) %}
+                                                   ${{ montoCobro_vgc | number_format(0,',','.') }} 
+                                             </span>
+                                          </div>
+                                          <!-- /.info-box-content -->
+                                       </div>
+                                    {% endif %}                                    
+                                 </td>
+                                 {# monto pago #}
+                                 <td class='text-right'>
+                                    {% if hayPago %} 
+                                       <b>${{ gastoComun.montoPago_cgc | number_format(0,',','.') }}</b>
+                                    {% else %}
+                                       {% if hayCobro %}
+                                          {% set montoCobroTemp = gastoComun.montoCobro_cgc %}</i>
+                                       {% else %}
+                                          {# se calcula sumando gasto comun total + deuda + interes #}
+                                          {% set montoCobroTemp = (montoGasto_vgc + gastoComun.deuda_vgc + interes_vgc) %}
+                                       {% endif %}
+                                       <div class="info-box generar-pago" data-toggle="modal" data-target="#modal-default" data-monto='{{montoCobroTemp | number_format(0,',','')}}' id="generar-pago-{{gastoComun.idUnidad}}">
+                                          <span class="info-box-icon bg-success"><i class="fas fa-hand-holding-usd"></i></span>
+                                          <div class="info-box-content">
+                                             <span class="info-box-text">Generar Pago</span>
+                                             <span class="info-box-number">
+                                                <i>${{ montoCobroTemp | number_format(0,',','.') }}</i>
+                                             </span>
+                                          </div>
+                                          <!-- /.info-box-content -->
+                                       </div>
+                                    {% endif %}                                    
+                                 </td>
+                                 {# saldo #}
+                                 {% if hayPago %} 
+                                    <td class='text-right'>
+                                       <b>${{ gastoComun.saldo_cgc | number_format(0,',','.') }}</b>
+                                    </td>
+                                 {% else %}
+                                    <td class='text-center align-middle text-muted' id='casilla-saldo-{{gastoComun.idUnidad}}'>
+                                       Sin pago
+                                    </td>
+                                 {% endif %}                                
+                              </tr>
+                           {% endfor %}
+                        </tbody>
+                     </table>
+                  </div>
+                  <!-- /.card-body -->
+                  <!-- /.card -->
+               </div>
+            </div>
+            {# <div class="col-12">
+               <div class="card">
+                  <div class="card-header">
+                     <h3 class="card-title">Listado de Clientes-Unidades</h3>
+                  </div>
+                  <!-- /.card-header -->
+
+                  <div class="card-body table-responsive table-bordered p-0">
+                     <table class="table table-hover w-100">
+                        <thead>
+                        <tr>
+                           <th style="width:20%"></th>
+                           <th style="width:40%" colspan='4'>Datos de la Unidad</th>
+                           <th style="width:40%" colspan='3'>Datos del Propietario</th>
+                        </tr>
+                        <tr>
+                           <th style="width:20%">Acciones</th>
+                           <th style="width:10%">Tipo</th>
+                           <th style="width:10%">Edificio</th>
+                           <th style="width:10%">Piso</th>
+                           <th style="width:10%">Unidad</th>
+                           <th style="width:10%">Dueño</th>
+                           <th style="width:10%">Representante</th>
+                           <th style="width:20%">Correo</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                           {% for unidad in unidades %}
+                              <tr {% if unidad.factor != null %} data-widget="expandable-table" aria-expanded="false" {% endif %}>
+                                 <td>
+                                    <div class="btn-group elevation-2">
+                                       {% if unidad.factor != null %}
+                                          <button class="btn btn-secondary">
+                                             <i class="fas fa-caret-right fa-fw"></i>
+                                          </button>
+                                       {% endif %}
+                                       <button class="btn btn-info">
+                                          <i class="fas fas fa-edit"></i>
+                                       </button>
+                                       <button class="btn btn-success">
+                                          <i class="fas fa-plus"></i>
+                                       </button>
+                                       <button class="btn btn-danger">
+                                          <i class="fas fa-trash"></i>
+                                       </button>
+                                    </div>
+                                 </td>
+                                 <td>{{ unidad.tipoUnidad }}</td>
+                                 <td>{{ unidad.edificio }}</td>
+                                 <td>{{ unidad.piso }}</td>
+                                 <td>{{ unidad.unidad }}</td>
+                                 <td>{{ unidad.nombrePropietario }}</td>
+                                 <td>{{ unidad.nombreRepresentante }}</td>
+                                 <td>{{ unidad.email1 }}<br>{{ unidad.email2 ? unidad.email2 }} </td>
+                              </tr>
+                              {% if unidad.factor != null %}
+                                 <tr class="expandable-body" >
+                                    <td colspan="8" class="border border-primary m-0 p-0">
+                                       <h4 class="m-0 p-1">Cobros asociados a la unidad</h4>
+                                       <div class="p-0 w-100">
+                                          <table class="table w-100 m-0">
+                                             <thead>
+                                             <tr>
+                                                <th style="width:20%"></th>
+                                                <th style="width:80%" colspan='5'>Datos del Cobro</th>
+                                             </tr>
+                                             <tr>
+                                                <th style="width:20%">Acciones</th>
+                                                <th style="width:15%">Factor (%)</th>
+                                                <th style="width:15%">Mensual</th>
+                                                <th style="width:15%">Fondo Reserva</th>
+                                                <th style="width:15%">Adicional</th>
+                                                <th style="width:20%">Total</th>
+                                             </tr>
+                                             </thead>
+                                             <tbody>
+                                                <tr>
+                                                   <td>
+                                                      <div class="btn-group elevation-2">
+                                                      <button class="btn btn-info">
+                                                         <i class="fas fas fa-edit"></i>
+                                                      </button>
+                                                      <button class="btn btn-danger">
+                                                         <i class="fas fa-trash"></i>
+                                                      </button>
+                                                      </div>
+                                                   </td>
+                                                   <td>{{ unidad.factor }}</td>
+                                                   <td>{{ unidad.mensual }}</td>
+                                                   <td>{{ unidad.fondoReserva }}</td>
+                                                   <td>{{ unidad.adicional }}</td>
+                                                   <td>{{ unidad.factor + unidad.mensual + unidad.fondoReserva + unidad.adicional}}</td>
+                                                </tr>
+                                             </tbody>
+                                          </table>
+                                       </div>
+                                       {% if unidad.unidadHija_tipoUnidad != null %}
+                                          <p>Unidad Hija o unidad asociada</p>
+                                          <div class="p-0 w-100">
+                                             <table class="table w-100 m-0">
+                                                <thead>
+                                                <tr>
+                                                   <th style="width:20%"></th>
+                                                   <th style="width:80%" colspan='5'>Datos de la unidad Hija o unidad asociada</th>
+                                                </tr>
+                                                <tr>
+                                                   <th style="width:20%">Acciones</th>
+                                                   <th style="width:20%">Tipo Unidad</th>
+                                                   <th style="width:20%">Edificio</th>
+                                                   <th style="width:20%">Piso</th>
+                                                   <th style="width:20%">Unidad</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                   <tr>
+                                                      <td>
+                                                         <div class="btn-group elevation-2">
+                                                         <button class="btn btn-info">
+                                                            <i class="fas fas fa-edit"></i>
+                                                         </button>
+                                                         <button class="btn btn-danger">
+                                                            <i class="fas fa-trash"></i>
+                                                         </button>
+                                                         </div>
+                                                      </td>
+                                                      <td>{{ unidad.unidadHija_tipoUnidad }}</td>
+                                                      <td>{{ unidad.unidadHija_edificio }}</td>
+                                                      <td>{{ unidad.unidadHija_piso }}</td>
+                                                      <td>{{ unidad.unidadHija_unidad }}</td>
+                                                   </tr>
+                                                </tbody>
+                                             </table>
+                                          </div>
+                                       {% endif %}
+                                    </td>
+                                 </tr>
+                              {% endif %}
+                           {% else %}
+                              <tr>
+                                 <td colspan="8">No hay registros para mostrar</td>
+                              </tr>
+                           {% endfor %}
+                        </tbody>
+                     </table>
+                  </div>
+                  <!-- /.card-body -->
+               </div>
+               <!-- /.card -->
+            </div> #}
+         </div>
+         <!-- /.row -->
+      </div><!-- /.container-fluid -->
+   </div>
+   <!-- /.content -->
 </div>
+
+{# hidden divs #}
+<div id='loading-overlay' style="display:none">
+   <div class='overlay' style="cursor:default" >
+      <i class="fas fa-3x fa-sync-alt fa-spin"></i>
+   </div>
+</div>
+
+<div class="modal fade" id="modal-default" data-backdrop="static">
+   <div class="modal-dialog">
+      <div class="modal-content">
+         <div class="overlay d-flex justify-content-center align-items-center" style="display:none !important" id="overlay-modal">
+            <i class="fas fa-3x fa-sync fa-spin"></i>
+         </div>
+         <div class="modal-header">
+            <h4 class="modal-title">Generar Pago</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+               <span aria-hidden="true">&times;</span>
+            </button>
+         </div>
+         <div class="modal-body">
+            {{form_start(formPago, {'attr' : {'id': 'formPago' }}) }}
+            <div class="form-group">
+               {{form_label(formPago.montoPago) }}
+               <div class="input-group">
+                  <div class="input-group-prepend"><span class="input-group-text"><i class="fas fa-dollar-sign"></i></span></div>
+                  {{form_widget(formPago.montoPago, {'id' : 'formPago_montoPago'}) }}
+               </div>
+               {{form_help(formPago.montoPago) }}
+               <!-- /.input group -->
+            </div>
+         </div>
+         <div class="modal-footer justify-content-between">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+            {{ form_widget(formPago.guardar) }}
+         </div>
+         {{form_row(formPago.mes, {'id' : 'formPago_mes'}) }}
+         {{form_row(formPago.unidad, {'id' : 'formPago_unidad'}) }}
+         {{form_row(formPago.anio, {'id' : 'formPago_anio'}) }}
+         {{form_end(formPago)}}
+      </div>
+      <!-- /.modal-content -->
+   </div>
+   <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+{% endblock %}
+{% block javascripts %}
+{{parent()}}
+<script src="{{ asset('dist/js/jquery.numeric.js') }}"></script>
+<script type="text/javascript">
+   $(".numeric").numeric({ negative: false });
+
+   $('.generar-cobro').click(function(){
+      if($(this).children('.overlay').length == 0){
+         var caluga = $(this);
+         var id = caluga.attr("id").split("-");
+         var mes = $("#form_mes").val();
+         var anio = $("#form_anio").val();
+         var ruta = Routing.generate('gastos_comunes_generar_cobro');
+         caluga.prepend($("#loading-overlay").html());
+         $.ajax({ // llama ajax
+				data: ({unidad: id[2], mes, anio }), // obtiene datos del form
+				type: 'POST', // GET or POST
+				url: ruta, // llama el archivo de ejecucion
+            dataType: 'json',
+				success: function(response) { // la respuesta..
+               if(response.success){
+                  caluga.parent('td').parent('tr').addClass('bg-warning-soft');
+                  caluga.parent('td').html('<b>$'+addCommas(response.montoCobro)+'</b>');
+                  caluga.remove();
+                  abrirToast('Cobro Guardado', '¡Éxitoso!', "fas fa-clipboard-check", 'bg-warning', 'Se generó cobro de <b>$'+addCommas(response.montoCobro)+'</b> para unidad <b>'+ response.unidad +'</b>' );
+               }
+               else {
+                  console.log(response.msg);
+                  caluga.find(".overlay").remove();
+                  abrirToast('No se guardó cobro', '¡Érror!', "fas fa-exclamation-circle", 'bg-danger', 'Ocurrió un error al generar cobro, intente nuevamente' );
+               }
+				}
+			});
+      }
+   });
+
+   $('#modal-default').on('show.bs.modal', function (event) {
+      var button = $(event.relatedTarget) // Button that triggered the modal
+      $("#formPago_montoPago").val(button.data('monto'));
+      $("#formPago_unidad").val(button.attr("id").split("-")[2]);
+      $("#formPago_mes").val($("#form_mes").val());
+      $("#formPago_anio").val($("#form_anio").val());
+      button.prepend($("#loading-overlay").html());
+   });
+
+   $('#modal-default').on('hide.bs.modal', function (event) {
+      var id = $("#formPago_unidad").val();
+      $("#generar-pago-"+id).find(".overlay").remove();
+   });
+
+   $("#formPago").submit(function(){
+      $("#overlay-modal").show();
+      $.ajax({ // llama ajax
+         data: $(this).serialize(), // obtiene datos del form
+         type: $(this).attr('method'), // GET or POST
+         url: $(this).attr('action'), // llama el archivo de ejecucion
+         success: function(response) { // la respuesta..
+            var id = $("#formPago_unidad").val();
+            var caluga = $("#generar-pago-"+id);
+            if(response.success) {
+               $("#overlay-modal").attr('style','display:none !important');
+               $('#modal-default').modal('hide');
+               $("#generar-cobro-"+id).parent('td').html('<b>$'+addCommas(response.montoCobro)+'</b>');
+               caluga.parent('td').parent('tr').addClass('bg-success-soft');
+               caluga.parent('td').html('<b>$'+addCommas(response.montoPago)+'</b>');
+               $("#casilla-saldo-"+id).html('<b>$'+addCommas(response.saldo)+'</b>');
+               $("#casilla-saldo-"+id).removeClass('text-center align-middle text-muted').addClass('text-right');
+               caluga.remove();
+               $("#generar-cobro-"+id).remove();
+               abrirToast('Pago Guardado', '¡Éxitoso!', "fas fa-clipboard-check", 'bg-success', 'Se generó pago de <b>$'+addCommas(response.montoPago)+'</b> para unidad <b>'+ response.unidad +'</b>' );
+            } else {
+               console.log(response.msg);
+               caluga.find(".overlay").remove();
+               abrirToast('No se guardó pago', '¡Érror!', "fas fa-exclamation-circle", 'bg-danger', 'Ocurrió un error al generar pago, intente nuevamente' );
+            }
+         }
+      });
+      return false;
+   });
+
+   function abrirToast(title, subtitle, icon, type, body){
+      $(document).Toasts('create', {
+        title: title,
+        subtitle: subtitle,
+        icon: icon,
+        class: type,
+        autohide: true,
+        delay: 4000,
+        body: body
+      })
+   }
+
+   function addCommas(nStr)
+   {
+      nStr += '';
+      x = nStr.split('.');
+      x1 = x[0];
+      x2 = x.length > 1 ? '.' + x[1] : '';
+      var rgx = /(\d+)(\d{3})/;
+      while (rgx.test(x1)) {
+         x1 = x1.replace(rgx, '$1' + '.' + '$2');
+      }
+      return x1 + x2;
+   }
+</script>
 {% endblock %}

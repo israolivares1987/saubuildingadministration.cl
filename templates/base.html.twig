@@ -10,7 +10,7 @@
             <!-- Font Awesome Icons -->
             <link rel="stylesheet" href="{{ asset('plugins/fontawesome-free/css/all.min.css') }}">
             <!-- Theme style -->
-            <link rel="stylesheet" href="{{ asset('dist/css/adminlte.min.css') }}">
+            <link rel="stylesheet" href="{{ asset('dist/css/adminlte.css') }}">
             <!-- Custom css -->
             <link rel="stylesheet" href="{{ asset('dist/css/custom.css') }}">
         {% endblock %}
@@ -28,6 +28,10 @@
         <script src="{{ asset('plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
         <!-- AdminLTE App -->
         <script src="{{ asset('dist/js/adminlte.min.js') }}"></script>
+        {# router bundle #}
+        <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+        <script src="{{ path('fos_js_routing_js', { callback: 'fos.Router.setData' }) }}"></script>
+
         {% endblock %}
     </body>
 </html>

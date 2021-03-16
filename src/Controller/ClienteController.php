@@ -99,57 +99,6 @@ class ClienteController extends AbstractController
     }
 
     /**
-     * @Route("/unidades", name="clientes_unidades")
-     * @IsGranted("IS_AUTHENTICATED_FULLY")
-     */
-    public function unidades(UnidadRepository $unidadRepository, Request $request): Response
-    {
-        $formFiltro = $this->createFormBuilder()
-            ->add('conjunto', EntityType::class, [
-                'class' => Conjunto::class,
-                'choice_label' => 'nombre',
-                'placeholder' => 'Seleccione...',
-                'label' => 'Conjunto o Edificio',
-                'required' => false
-            ])
-            ->add('tipoUnidad', EntityType::class, [
-                'class' => TipoUnidad::class,
-                'choice_label' => 'nombre',
-                'placeholder' => 'Seleccione...',
-                'label' => 'Tipo de Unidad',
-                'required' => false
-            ])
-            ->add('unidad', TextType::class, [
-                'required' => false
-            ])
-            ->add('persona', TextType::class, [
-                'required' => false,
-                'label' => 'Nombre de la Persona'
-            ])
-            ->add('filtrar', SubmitType::class, [
-                'attr' => ['class' =>'btn btn-primary btn-block'],
-                'label' => 'Filtrar'
-            ])
-            ->getForm();
-        $formFiltro->handleRequest($request);
-        $conjunto = null;
-        $tipoUnidad = null;
-        $unidad = null;
-        $persona = null;
-        if ($formFiltro->isSubmitted() && $formFiltro->isValid()) {
-            $conjunto = $formFiltro['conjunto']->getData();
-            $tipoUnidad = $formFiltro['tipoUnidad']->getData();
-            $unidad = $formFiltro['unidad']->getData();
-            $persona = $formFiltro['persona']->getData();
-        }
-        $unidades = $unidadRepository->buscarUnidadesClientes($conjunto, $tipoUnidad, $unidad, $persona);
-        return $this->render('cliente/clientes-unidades.html.twig', [
-            'unidades' => $unidades,
-            'formFiltro' => $formFiltro->createView()
-        ]);
-    }
-
-    /**
      * @Route("/{id}", name="cliente_ver", methods={"GET"})
      * @IsGranted("IS_AUTHENTICATED_FULLY")
      */
@@ -172,7 +121,7 @@ class ClienteController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            $this->addFlash('unidad_success', 'Se actualizó el cliente');
+            $this->addFlash('cliente_success', 'Se actualizó el cliente');
 
             return $this->redirectToRoute('mantenedores_clientes_index');
         }
