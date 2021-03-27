@@ -78,6 +78,11 @@ class Unidad
      * @ORM\OneToOne(targetEntity=VariablesGastoComun::class, mappedBy="unidad", cascade={"persist", "remove"})
      */
     private $variablesGastoComun;
+    
+    /**
+     * @ORM\OneToOne(targetEntity=VariablesGastoComun::class, mappedBy="unidadHija")
+     */
+    private $unidadHijaVariablesGastoComun;
 
     /**
      * @ORM\OneToMany(targetEntity=CuentaGastoComun::class, mappedBy="unidad")
@@ -266,6 +271,28 @@ class Unidad
         }
 
         $this->variablesGastoComun = $variablesGastoComun;
+
+        return $this;
+    }
+    
+    public function getUnidadHijaVariablesGastoComun(): ?VariablesGastoComun
+    {
+        return $this->unidadHijaVariablesGastoComun;
+    }
+
+    public function setUnidadHijaVariablesGastoComun(?VariablesGastoComun $variablesGastoComun): self
+    {
+        // unset the owning side of the relation if necessary
+        if ($variablesGastoComun === null && $this->unidadHijaVariablesGastoComun !== null) {
+            $this->variablesGastoComun->setUnidadHija(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($variablesGastoComun !== null && $variablesGastoComun->getUnidadHija() !== $this) {
+            $variablesGastoComun->setUnidadHija($this);
+        }
+
+        $this->unidadHijaVariablesGastoComun = $variablesGastoComun;
 
         return $this;
     }

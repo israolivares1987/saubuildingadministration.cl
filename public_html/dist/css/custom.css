@@ -65,3 +65,7 @@ td .info-box .info-box-content {
 .bg-success-soft {
     background-color: #8FD79F !important;
 }
+
+.nav-tabs .nav-link {
+    cursor: pointer;
+}

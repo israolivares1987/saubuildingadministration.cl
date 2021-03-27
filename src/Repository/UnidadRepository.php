@@ -47,7 +47,7 @@ class UnidadRepository extends ServiceEntityRepository
         return $qb->getQuery();
     }
 
-    public function buscarGastosComunes(Conjunto $conjunto = null, TipoUnidad $tipoUnidad = null, $unidad = null, $persona = null, $ano = null, $mes = null) {
+    public function buscarGastosComunes(Conjunto $conjunto = null, TipoUnidad $tipoUnidad = null, $unidad = null, $persona = null, $ano = null, $mes = null, $default) {
 
         $ano = $ano ?: 2021;
         $mes = $mes ?: 1;
@@ -69,6 +69,8 @@ class UnidadRepository extends ServiceEntityRepository
             cgc.adicional as adicional_cgc,
             cgc.deuda as deuda_cgc,
             cgc.interes as interes_cgc,
+            cgc.anoGasto as anio_gasto,
+            cgc.mesGasto as mes_gasto,
             cgc.montoCobro as montoCobro_cgc,
             cgc.montoPago as montoPago_cgc,
             cgc.saldo as saldo_cgc,
@@ -78,11 +80,20 @@ class UnidadRepository extends ServiceEntityRepository
         ->leftJoin('u.propietario', 'pro') //join con propietario
         ->leftJoin('pro.cliente', 'p') //join con cliente segun id propietario
         ->leftJoin('u.tipoUnidad', 't') //join tipo unidad
-        ->leftJoin('u.conjunto', 'c') //join conjunto
-        ->leftJoin('u.cuentasGastoComun', 'cgc') //join con cuenta de gasto comun de unidad
-        ->leftJoin('u.variablesGastoComun', 'vgc') //join con variables de gasto comun de unidad
-        ->andWhere('cgc.anoGasto = '.$ano.' OR cgc.anoGasto IS NULL')
-        ->andWhere('cgc.mesGasto = '.$mes.' OR cgc.mesGasto IS NULL')
+        ->leftJoin('u.conjunto', 'c'); //join conjunto
+        if($default){
+            $qb->leftJoin('u.cuentasGastoComun', 'cgc') //join con cuenta de gasto comun de unidad
+            ->andWhere('cgc.anoGasto = '.$ano.' OR cgc.anoGasto IS NULL')
+            ->andWhere('cgc.mesGasto = '.$mes.' OR cgc.mesGasto IS NULL');
+        }
+        else {
+            $mesAnterior = $mes-1;
+            $qb->innerJoin('u.cuentasGastoComun', 'cgc') //join con cuenta de gasto comun de unidad
+            ->andWhere('cgc.anoGasto = '.$ano)
+            //para buscar para este mes debe haber (pago de mes anterior) XOR (cobro o pago de este mes)
+            ->andWhere('(cgc.mesGasto = '.$mesAnterior.' AND cgc.saldo IS NOT NULL) OR (cgc.mesGasto = '.$mes.' AND (cgc.montoCobro IS NOT NULL OR cgc.saldo IS NOT NULL))');
+        }
+        $qb->leftJoin('u.variablesGastoComun', 'vgc') //join con variables de gasto comun de unidad
         ->andWhere('vgc.factor IS NOT NULL');
         if($tipoUnidad != null){
             $qb->andWhere('u.tipoUnidad = '.$tipoUnidad->getId());
@@ -98,7 +109,7 @@ class UnidadRepository extends ServiceEntityRepository
             $qb->setParameter('nombres', '%'.$persona.'%');
         }
         $qb->orderBy('u.id', 'asc');
-        
+        $qb->addOrderBy('cgc.mesGasto', 'desc');        
         
         return $qb->getQuery()->getResult();
     }

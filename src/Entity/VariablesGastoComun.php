@@ -43,7 +43,7 @@ class VariablesGastoComun
     private $unidad;
 
     /**
-     * @ORM\OneToOne(targetEntity=Unidad::class, inversedBy="variablesGastoComun", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity=Unidad::class, inversedBy="unidadHijaVariablesGastoComun", cascade={"persist", "remove"})
      */
     private $unidadHija;
 

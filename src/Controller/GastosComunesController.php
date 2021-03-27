@@ -33,8 +33,13 @@ class GastosComunesController extends AbstractController
      */
     public function index(UnidadRepository $unidadRepository, Request $request, SessionInterface $session): Response
     {
-        $arrayAnios = ['2021' => 2021, '2022' => 2022];
-        //<input type="text" class="form-control" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask="" inputmode="numeric">
+        //cuando entro al control
+        $arrayAnios = ['2021' => 2021];
+        $anioMinimo = 2021;
+        $mesMinimo = 1;
+        $anioActual = date('Y');
+        $mesActual  = date('n');
+        //seteamos forms
         $formPago = $this->createFormBuilder()
             ->add('montoPago', NumberType::class, [
                 'attr' => ['class' => 'numeric'],
@@ -82,22 +87,25 @@ class GastosComunesController extends AbstractController
                 'label' => false,
                 'required' => false
             ])
-            ->add('mes', HiddenType::class, [
-                'data' => '1'
-            ])
+            ->add('mes', HiddenType::class)
             ->add('filtrar', SubmitType::class, [
                 'attr' => ['class' => 'btn btn-primary btn-block'],
                 'label' => '<i class="fas fa-filter"></i> Filtrar',
                 'label_html' => true
             ])
             ->getForm();
-        $formFiltro->handleRequest($request);
+        //seteamos variables basicas
         $conjunto = null;
         $tipoUnidad = null;
         $unidad = null;
         $persona = null;
-        $anio = null;
-        $mes = null;
+        $anio = $anioActual;
+        $mes = $mesActual;
+        
+        $formFiltro->handleRequest($request);
+        
+        //si se submitio formulario seteo valores de busqueda segun formulario
+        //si no hubo submit es por que es una carga fresca
         if ($formFiltro->isSubmitted() && $formFiltro->isValid()) {
             $conjunto = $formFiltro['conjunto']->getData();
             $tipoUnidad = $formFiltro['tipoUnidad']->getData();
@@ -106,14 +114,48 @@ class GastosComunesController extends AbstractController
             $anio = $formFiltro['anio']->getData();
             $mes = $formFiltro['mes']->getData();
         }
-        $gastosComunes = $unidadRepository->buscarGastosComunes($conjunto, $tipoUnidad, $unidad, $persona, $anio, $mes);
+        
+        //si el mes y anio seteados son iguales al minimo, entonces buscamos los datos default
+        //que significa buscar si estan los datos del anio y mes y los datos por defecto si no existe registro
+        if($anio == $anioMinimo && $mes == $mesMinimo){
+            //true = default
+            $gastosComunes = $unidadRepository->buscarGastosComunes($conjunto, $tipoUnidad, $unidad, $persona, $anio, $mes, true);
+        }
+        //sino buscamos gastos comunes que existan de este mes y del mes anterior
+        else {
+            //mientras no existan datos debemos buscar el mes mas bajo hasta el minimo
+            //cuando llega al mes minimo entonces buscamos por default
+            do {
+                //false = existente este mes y anterior
+                if($mes == $mesMinimo){
+                    $gastosComunes = $unidadRepository->buscarGastosComunes($conjunto, $tipoUnidad, $unidad, $persona, $anio, $mes, true);
+                } else {
+                    $gastosComunes = $unidadRepository->buscarGastosComunes($conjunto, $tipoUnidad, $unidad, $persona, $anio, $mes, false);
+                    if(!$gastosComunes){
+                        $mes -= 1;
+                    }
+                }
+            } while (!$gastosComunes);
+        }
+        //quitamos duplicados
+        $duplicado = null;
+        foreach($gastosComunes as $key => $val){
+            if($duplicado != $val['idUnidad']){
+                $duplicado = $val['idUnidad'];
+            }
+            else{
+                unset($gastosComunes[$key]);
+            }
+        }
         $comunidad = $session->get('comunidad');
         $paramFin = $comunidad->getParametrosFinacierosComunidad();
         return $this->render('gastos_comunes/administracion.html.twig', [
             'gastosComunes' => $gastosComunes,
             'paramFin' => $paramFin,
             'formFiltro' => $formFiltro->createView(),
-            'formPago' => $formPago->createView()
+            'formPago' => $formPago->createView(),
+            'mesActual' => $mes,
+            'mesMinimo' => $mesMinimo
         ]);
     }
 
@@ -182,6 +224,11 @@ class GastosComunesController extends AbstractController
 
     private function guardarCobro($unidad, $mes, $anio, SessionInterface $session)
     {
+        $mesMinimo = 1;
+        $mesBase = true;
+        if($mesMinimo < $mes){
+            $mesBase = false;
+        }
         $em = $this->getDoctrine()->getManager();
 
         //traemos la unidad
@@ -199,14 +246,24 @@ class GastosComunesController extends AbstractController
         $mensualBase = $factor * $paramFin->getCostoAnual() / 100;
         $fondoReserva = $mensualBase * $paramFin->getPorcFondoReserva() / 100;
         $adicional = $varGastoComun->getAdicional();
-        $deuda = $varGastoComun->getDeudaHistorica();
+        
+        if($mesBase){
+            $deuda = $varGastoComun->getDeudaHistorica();
+        }
+        else{
+            //y si no es mes Base traemos la cuenta del mes anterior para obtener deuda segun saldo
+            $cuentaGastoComun = $em->getRepository(CuentaGastoComun::class)->findOneBy(array('unidad' => $unidad, 'anoGasto' => $anio, 'mesGasto' => $mes-1));
+            $deuda = $cuentaGastoComun->getSaldo();
+        }
+
         $montoGastoComun = $mensualBase + $fondoReserva + $adicional;
+
         if ($deuda > ($montoGastoComun * 2)) {
             $interes = $deuda * $paramFin->getPorcInteres() / 100;
         } else {
             $interes = 0;
         }
-        $montoCobro = number_format($montoGastoComun + $deuda + $interes, 0, '', '');
+            $montoCobro = number_format($montoGastoComun + $deuda + $interes, 0, '', '');
 
         //crear objeto de cuenta gasto comun
         $gastoUnidad = new CuentaGastoComun;
