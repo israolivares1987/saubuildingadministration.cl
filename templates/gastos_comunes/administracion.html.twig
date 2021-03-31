@@ -414,12 +414,12 @@
       "buttons": [
          {
             extend: "excel",
-            text: "<i class='fas fa-file-excel'></i> Guardar en archivo Excel",
+            text: "<i class='fas fa-file-excel'></i> Guardar Excel",
             filename: "Gastos Comunes " + tabActivo.html() + " " + $("#form_anio").val()
          },
          {
             extend: "pdf",
-            text: "<i class='fas fa-file-pdf'></i> Guardar en archivo PDF",
+            text: "<i class='fas fa-file-pdf'></i> Guardar PDF",
             filename: "Gastos Comunes " + tabActivo.html() + " " + $("#form_anio").val()
          },
          {
@@ -431,7 +431,7 @@
             text: "<i class='fas fa-columns'></i> Ver Columnas"
          }
       ]
-   }).buttons().container().appendTo('#tabla1_wrapper .col-md-12:eq(0)');
+   }).buttons().container().appendTo('#tabla1_wrapper .col-md-6:eq(0)');
    $(".tab-gastos").click(function(){
       var id = $(this).attr("id").split("-");
       $("#form_mes").val(id[1]);
