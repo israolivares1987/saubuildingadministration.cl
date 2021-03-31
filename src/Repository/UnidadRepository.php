@@ -62,7 +62,8 @@ class UnidadRepository extends ServiceEntityRepository
             p.nombres as nombrePropietario, 
             p.representante as nombreRepresentante, 
             t.nombre as tipoUnidad,
-            u.unidad, 
+            u.unidad,
+            uh.unidad as unidadHija, 
             cgc.factor as factor_cgc,
             cgc.mensualBase as mensualBase_cgc,
             cgc.fondoReserva as fondoReserva_cgc,
@@ -94,6 +95,7 @@ class UnidadRepository extends ServiceEntityRepository
             ->andWhere('(cgc.mesGasto = '.$mesAnterior.' AND cgc.saldo IS NOT NULL) OR (cgc.mesGasto = '.$mes.' AND (cgc.montoCobro IS NOT NULL OR cgc.saldo IS NOT NULL))');
         }
         $qb->leftJoin('u.variablesGastoComun', 'vgc') //join con variables de gasto comun de unidad
+        ->leftJoin('vgc.unidadHija', 'uh') //join con unidad hija de gasto comun de unidad
         ->andWhere('vgc.factor IS NOT NULL');
         if($tipoUnidad != null){
             $qb->andWhere('u.tipoUnidad = '.$tipoUnidad->getId());
